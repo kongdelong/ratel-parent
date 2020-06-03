@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @Service
 @CacheConfig(cacheNames = "sysDept")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class SysDeptService extends BaseService<SysDept, Long> {
+public class SysDeptService extends BaseService<SysDept, String> {
 
     @Autowired
     private SysDeptRepository sysDeptRepository;

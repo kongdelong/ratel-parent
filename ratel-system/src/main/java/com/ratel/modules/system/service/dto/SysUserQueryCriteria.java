@@ -15,7 +15,7 @@ public class SysUserQueryCriteria implements Serializable {
     private String id;
 
     @Query(propName = "id", type = Query.Type.IN, joinName = "sysDept")
-    private Set<Long> sysDeptIds;
+    private Set<String> sysDeptIds;
 
     @Query(blurry = "email,username,nickName")
     private String blurry;

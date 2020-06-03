@@ -51,7 +51,7 @@ public class SysMenuService extends BaseService<SysMenu, Long> {
     }
 
     public List<SysMenu> findByRoles(List<RoleSmallDto> roles) {
-        Set<Long> roleIds = roles.stream().map(RoleSmallDto::getId).collect(Collectors.toSet());
+        Set<String> roleIds = roles.stream().map(RoleSmallDto::getId).collect(Collectors.toSet());
         LinkedHashSet<SysMenu> menus = sysMenuRepository.findBySysRoles_IdInAndTypeNotOrderBySortAsc(roleIds, 2);
         return menus.stream().collect(Collectors.toList());
     }

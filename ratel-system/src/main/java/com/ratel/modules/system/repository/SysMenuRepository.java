@@ -42,5 +42,5 @@ public interface SysMenuRepository extends BaseRepository<SysMenu, String> {
      * @param type    类型
      * @return /
      */
-    LinkedHashSet<SysMenu> findBySysRoles_IdInAndTypeNotOrderBySortAsc(Set<Long> roleIds, int type);
+    LinkedHashSet<SysMenu> findBySysRoles_IdInAndTypeNotOrderBySortAsc(Set<String> roleIds, int type);
 }
