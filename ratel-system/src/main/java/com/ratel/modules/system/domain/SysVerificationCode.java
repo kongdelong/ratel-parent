@@ -1,19 +1,24 @@
 package com.ratel.modules.system.domain;
 
 import com.ratel.framework.domain.BaseUuidEntity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.Accessors;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
-@Data
+@Getter
+@Setter
+@Accessors(chain = true)
+@Access(AccessType.FIELD)
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "sys_verification_code")
+@NoArgsConstructor
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class SysVerificationCode extends BaseUuidEntity {
 
     private String code;

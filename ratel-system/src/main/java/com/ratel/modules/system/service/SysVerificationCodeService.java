@@ -29,7 +29,7 @@ public class SysVerificationCodeService extends BaseService<SysVerificationCode,
     @Autowired
     private SysVerificationCodeRepository sysVerificationCodeRepository;
 
-    @Value("${code.expiration}")
+    @Value("${ratel.code.expiration}")
     private Integer expiration;
 
 

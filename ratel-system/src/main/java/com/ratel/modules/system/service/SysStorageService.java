@@ -55,7 +55,7 @@ public class SysStorageService extends BaseService<SysStorage, String> {
     @Cacheable(key = "#p0")
     public SysStorage findById(String id) {
         SysStorage localStorage = sysStorageRepository.findById(id).orElseGet(SysStorage::new);
-        ValidationUtil.isNull(localStorage.getId(), "LocalStorage", "id", id);
+        ValidationUtil.isNull(localStorage.getId(), "SysStorage", "id", id);
         return localStorage;
     }
 

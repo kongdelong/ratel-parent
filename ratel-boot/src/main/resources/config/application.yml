@@ -49,10 +49,14 @@ task:
     # 队列容量
     queue-capacity: 50
 
+#邮箱验证码有效时间/分钟
+ratel:
+  code:
+    expiration: 5
 
-#登录图形验证码有效时间/分钟
-loginCode:
-  expiration: 2
+  #登录图形验证码有效时间/分钟
+  loginCode:
+    expiration: 2
 
 #密码加密传输，前端公钥加密，后端私钥解密
 rsa:

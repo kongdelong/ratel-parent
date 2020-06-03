@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api/logs")
+@RequestMapping("/api/sys/logs")
 @Api(tags = "监控：日志管理")
 public class SysLogController {
 

@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Api(tags = "工具：本地存储管理")
+@Api(tags = "系统：本地存储管理")
 @RestController
 @RequestMapping("/api/sys/storage")
 public class SysStorageController {
