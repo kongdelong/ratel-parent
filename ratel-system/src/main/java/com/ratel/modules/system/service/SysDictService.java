@@ -1,12 +1,14 @@
 package com.ratel.modules.system.service;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.db.PageResult;
 import com.ratel.framework.service.BaseService;
 import com.ratel.framework.utils.FileUtil;
 import com.ratel.framework.utils.QueryHelp;
 import com.ratel.framework.utils.ValidationUtil;
 import com.ratel.modules.system.domain.SysDict;
 import com.ratel.modules.system.domain.SysDictDetail;
+import com.ratel.modules.system.mapper.SysDictMapper;
 import com.ratel.modules.system.repository.SysDictRepository;
 import com.ratel.modules.system.service.dto.SysDictQueryCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +30,15 @@ import java.util.Map;
 
 
 @Service
-@CacheConfig(cacheNames = "dict")
+@CacheConfig(cacheNames = "sysDict")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class SysDictService extends BaseService<SysDict, String> {
 
     @Autowired
     private SysDictRepository sysDictRepository;
 
+    @Autowired
+    private SysDictMapper sysDictMapper;
 
     @Cacheable
     public Page queryAll(SysDictQueryCriteria dict, Pageable pageable) {
@@ -97,5 +101,13 @@ public class SysDictService extends BaseService<SysDict, String> {
             }
         }
         FileUtil.downloadExcel(list, response);
+    }
+
+    public SysDict getOne(String id) {
+        return sysDictMapper.getOne(id);
+    }
+
+    public PageResult findPage() {
+        return sysDictMapper.findPage();
     }
 }

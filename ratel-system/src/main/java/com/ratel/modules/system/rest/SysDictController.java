@@ -10,7 +10,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -42,7 +41,7 @@ public class SysDictController {
     @GetMapping(value = "/all")
     @PreAuthorize("@el.check('dict:list')")
     public ResponseEntity<Object> all() {
-        return new ResponseEntity<>(sysDictService.queryAll(new SysDictQueryCriteria()), HttpStatus.OK);
+        return FormsHttpEntity.ok(sysDictService.queryAll(new SysDictQueryCriteria()));
     }
 
     @RatelLog("查询字典")
@@ -50,7 +49,7 @@ public class SysDictController {
     @GetMapping
     @PreAuthorize("@el.check('dict:list')")
     public ResponseEntity<Object> getDicts(SysDictQueryCriteria resources, Pageable pageable) {
-        return new ResponseEntity<>(sysDictService.queryAll(resources, pageable), HttpStatus.OK);
+        return FormsHttpEntity.ok(sysDictService.queryAll(resources, pageable));
     }
 
     @RatelLog("新增字典")
@@ -61,7 +60,7 @@ public class SysDictController {
         if (resources.getId() != null) {
             throw new BadRequestException("A new " + ENTITY_NAME + " cannot already have an ID");
         }
-        return new ResponseEntity<>(sysDictService.create(resources), HttpStatus.CREATED);
+        return FormsHttpEntity.ok(sysDictService.create(resources));
     }
 
     @RatelLog("修改字典")
@@ -70,7 +69,7 @@ public class SysDictController {
     @PreAuthorize("@el.check('dict:edit')")
     public ResponseEntity<Object> update(@Validated(SysDict.Update.class) @RequestBody SysDict resources) {
         sysDictService.update(resources);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return FormsHttpEntity.ok();
     }
 
     @RatelLog("删除字典")
@@ -81,4 +80,19 @@ public class SysDictController {
         sysDictService.delete(id);
         return FormsHttpEntity.ok();
     }
+
+//    @ApiOperation("getOne")
+//    @GetMapping(value = "/getOne")
+//    public ResponseEntity<Object> getOne(@RequestParam String id) {
+//        sysDictService.getOne(id);
+//        return FormsHttpEntity.ok();
+//    }
+//
+//    @ApiOperation("getPage")
+//    @GetMapping(value = "/getPage")
+//    public ResponseEntity<Object> getPage() {
+//        PageResult pageResult = sysDictService.findPage();
+//        return FormsHttpEntity.ok();
+//    }
+
 }

@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@CacheConfig(cacheNames = "dictDetail")
+@CacheConfig(cacheNames = "sysDictDetail")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class SysDictDetailService extends BaseService<SysDictDetail, String> {
 

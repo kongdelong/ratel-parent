@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="ratel-framework" />
         <module name="ratel-system" />
+        <module name="ratel-log" />
         <module name="ratel-boot" />
       </profile>
     </annotationProcessing>
@@ -16,6 +17,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ratel-boot" options="-parameters" />
       <module name="ratel-framework" options="-parameters" />
+      <module name="ratel-log" options="-parameters" />
       <module name="ratel-system" options="-parameters" />
     </option>
   </component>

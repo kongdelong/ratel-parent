@@ -2,7 +2,7 @@ package com.ratel.framework.domain;
 
 import java.util.List;
 
-public interface BaseMapper<D, E> {
+public interface BaseMapstruct<D, E> {
 
     /**
      * DTO转Entity

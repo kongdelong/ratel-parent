@@ -55,4 +55,14 @@ public class GlobalConstant {
      * 兼容MySQL的最大日期值。直接用LocalDate.MAX会导致MySQL存储异常。
      */
     public final static LocalDate MAX_LOCAL_DATE = LocalDate.of(9999, 12, 31);
+
+
+    public static final String RESET_PASS = "重置密码";
+
+    public static final String RESET_MAIL = "重置邮箱";
+
+    /**
+     * 用于IP定位转换
+     */
+    public static final String REGION = "内网IP|内网IP";
 }
