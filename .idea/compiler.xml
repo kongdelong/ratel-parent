@@ -2,11 +2,13 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="ratel-framework" />
+        <module name="ratel-cache-redis" />
         <module name="ratel-system" />
         <module name="ratel-log" />
         <module name="ratel-boot" />
@@ -16,6 +18,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ratel-boot" options="-parameters" />
+      <module name="ratel-cache-redis" options="-parameters" />
       <module name="ratel-framework" options="-parameters" />
       <module name="ratel-log" options="-parameters" />
       <module name="ratel-system" options="-parameters" />

@@ -8,13 +8,14 @@
     <artifactId>ratel-parent</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>Ratel 后台框架</name>
+    <name>ratel-root</name>
 
     <modules>
         <module>ratel-boot</module>
         <module>ratel-framework</module>
         <module>ratel-system</module>
         <module>ratel-log</module>
+        <module>ratel-cache-redis</module>
     </modules>
 
     <parent>
@@ -185,6 +186,12 @@
             <version>1.5.21</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.whvcse</groupId>
+            <artifactId>easy-captcha</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+
         <!--Mysql依赖包-->
         <dependency>
             <groupId>mysql</groupId>
@@ -208,12 +215,14 @@
 
     <distributionManagement>
         <repository>
-            <id>rdc-releases</id>
-            <url>https://packages.aliyun.com/maven/repository/2006358-release-ZTOoR6/</url>
+            <id>releases</id>
+            <name>Nexus Release Repository</name>
+            <url>http://152.136.133.34:8081/nexus/content/repositories/releases/</url>
         </repository>
         <snapshotRepository>
-            <id>rdc-snapshots</id>
-            <url>https://packages.aliyun.com/maven/repository/2006358-snapshot-DcY8ON/</url>
+            <id>snapshots</id>
+            <name>Nexus Snapshot Repository</name>
+            <url>http://152.136.133.34:8081/nexus/content/repositories/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 

@@ -8,8 +8,9 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 public class RatelCacheImpl implements RatelCache {
+
     @Override
-    public void del(String key) {
+    public void del(String... key) {
 
     }
 
@@ -24,17 +25,22 @@ public class RatelCacheImpl implements RatelCache {
     }
 
     @Override
-    public void set(String s, Object object, long l) {
-
+    public boolean set(String s, Object object, long l) {
+        return false;
     }
 
     @Override
-    public long getExpire(String s) {
+    public long getExpire(Object key) {
         return 0;
     }
 
     @Override
-    public void expire(String s, long renew, TimeUnit milliseconds) {
+    public boolean expire(String s, long renew, TimeUnit milliseconds) {
+        return false;
+    }
 
+    @Override
+    public boolean set(String key, Object value, long time, TimeUnit timeUnit) {
+        return false;
     }
 }
