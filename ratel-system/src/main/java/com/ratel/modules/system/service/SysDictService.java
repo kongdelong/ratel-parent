@@ -8,7 +8,6 @@ import com.ratel.framework.utils.QueryHelp;
 import com.ratel.framework.utils.ValidationUtil;
 import com.ratel.modules.system.domain.SysDict;
 import com.ratel.modules.system.domain.SysDictDetail;
-import com.ratel.modules.system.mapper.SysDictMapper;
 import com.ratel.modules.system.repository.SysDictRepository;
 import com.ratel.modules.system.service.dto.SysDictQueryCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +35,6 @@ public class SysDictService extends BaseService<SysDict, String> {
 
     @Autowired
     private SysDictRepository sysDictRepository;
-
-    @Autowired
-    private SysDictMapper sysDictMapper;
 
     @Cacheable
     public Page queryAll(SysDictQueryCriteria dict, Pageable pageable) {
@@ -101,13 +97,5 @@ public class SysDictService extends BaseService<SysDict, String> {
             }
         }
         FileUtil.downloadExcel(list, response);
-    }
-
-    public SysDict getOne(String id) {
-        return sysDictMapper.getOne(id);
-    }
-
-    public PageResult findPage() {
-        return sysDictMapper.findPage();
     }
 }
