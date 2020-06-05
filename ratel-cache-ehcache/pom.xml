@@ -9,19 +9,23 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ratel-framework</artifactId>
+    <artifactId>ratel-cache-ehcache</artifactId>
 
     <dependencies>
-        <!--https://gitee.com/lionsoul/ip2region/tree/v1.4-release/-->
         <dependency>
-            <groupId>org.lionsoul</groupId>
-            <artifactId>ip2region</artifactId>
-            <version>1.7.2</version>
+            <groupId>com.ratel</groupId>
+            <artifactId>ratel-framework</artifactId>
+            <version>${ratel.framework.version}</version>
+        </dependency>
+
+        <!-- Ehcache 坐标 -->
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
         </dependency>
         <dependency>
-            <groupId>eu.bitwalker</groupId>
-            <artifactId>UserAgentUtils</artifactId>
-            <version>1.20</version>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-ehcache</artifactId>
         </dependency>
     </dependencies>
 </project>

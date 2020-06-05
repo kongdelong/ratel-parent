@@ -5,8 +5,8 @@ import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
 import com.ratel.framework.annotation.aop.log.RatelLog;
 import com.ratel.framework.annotation.security.AnonymousAccess;
-import com.ratel.framework.cache.RatelCache;
 import com.ratel.framework.exception.BadRequestException;
+import com.ratel.framework.modules.cache.RatelCacheProvider;
 import com.ratel.framework.utils.SecurityUtils;
 import com.ratel.framework.utils.StringUtils;
 import com.ratel.modules.security.config.SecurityProperties;
@@ -44,7 +44,7 @@ import java.util.concurrent.TimeUnit;
 @Api(tags = "系统：系统授权接口")
 public class AuthController {
 
-    @Value("${loginCode.expiration}")
+    @Value("${ratel.loginCode.expiration}")
     private Long expiration;
     @Value("${rsa.private_key}")
     private String privateKey;
@@ -53,7 +53,7 @@ public class AuthController {
     @Autowired
     private SecurityProperties properties;
     @Autowired
-    private RatelCache ratelCache;
+    private RatelCacheProvider ratelCacheProvider;
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
@@ -74,9 +74,9 @@ public class AuthController {
 
         if (!authUser.getClientType().equals("mobile")) {
             // 查询验证码
-            String code = (String) ratelCache.get(authUser.getUuid());
+            String code = (String) ratelCacheProvider.get(authUser.getUuid());
             // 清除验证码
-            ratelCache.del(authUser.getUuid());
+            ratelCacheProvider.del(authUser.getUuid());
 
             if (authUser.getClientType().equals("mobile") && StringUtils.isBlank(code)) {
                 throw new BadRequestException("验证码不存在或已过期");
@@ -128,7 +128,7 @@ public class AuthController {
         String result = captcha.text();
         String uuid = properties.getCodeKey() + IdUtil.simpleUUID();
         // 保存
-        ratelCache.set(uuid, result, expiration, TimeUnit.MINUTES);
+        ratelCacheProvider.set(uuid, result, expiration, TimeUnit.MINUTES);
         // 验证码信息
         Map<String, Object> imgResult = new HashMap<String, Object>(2) {{
             put("img", captcha.toBase64());

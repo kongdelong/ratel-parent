@@ -1,28 +1,28 @@
 package com.ratel.modules.redis;
 
-import com.ratel.framework.cache.RatelCache;
+import com.ratel.framework.modules.cache.RatelCacheProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.*;
+import org.springframework.data.redis.core.Cursor;
+import org.springframework.data.redis.core.RedisConnectionUtils;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-/**
- * @author /
- */
 @Component
-@SuppressWarnings({"unchecked","all"})
-public class RedisUtils implements RatelCache {
+@SuppressWarnings({"unchecked", "all"})
+public class RatelRedisCacheProvider implements RatelCacheProvider {
 
     private RedisTemplate<Object, Object> redisTemplate;
     @Value("${jwt.online-key}")
     private String onlineKey;
 
-    public RedisUtils(RedisTemplate<Object, Object> redisTemplate) {
+    public RatelRedisCacheProvider(RedisTemplate<Object, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
@@ -30,6 +30,7 @@ public class RedisUtils implements RatelCache {
 
     /**
      * 指定缓存失效时间
+     *
      * @param key  键
      * @param time 时间(秒)
      */
@@ -47,6 +48,7 @@ public class RedisUtils implements RatelCache {
 
     /**
      * 根据 key 获取过期时间
+     *
      * @param key 键 不能为null
      * @return 时间(秒) 返回0代表为永久有效
      */
@@ -56,8 +58,9 @@ public class RedisUtils implements RatelCache {
 
     /**
      * 指定缓存失效时间
-     * @param key  键
-     * @param time 时间(秒)
+     *
+     * @param key      键
+     * @param time     时间(秒)
      * @param timeUnit 单位
      */
     public boolean expire(String key, long time, TimeUnit timeUnit) {
@@ -74,6 +77,7 @@ public class RedisUtils implements RatelCache {
 
     /**
      * 查找匹配key
+     *
      * @param pattern key
      * @return /
      */
@@ -96,9 +100,10 @@ public class RedisUtils implements RatelCache {
 
     /**
      * 分页查询 key
+     *
      * @param patternKey key
-     * @param page 页码
-     * @param size 每页数目
+     * @param page       页码
+     * @param size       每页数目
      * @return /
      */
     public List<String> findKeysForPage(String patternKey, int page, int size) {
@@ -117,7 +122,7 @@ public class RedisUtils implements RatelCache {
                 continue;
             }
             // 获取到满足条件的数据后,就可以退出了
-            if(tmpIndex >=toIndex) {
+            if (tmpIndex >= toIndex) {
                 break;
             }
             tmpIndex++;
@@ -133,6 +138,7 @@ public class RedisUtils implements RatelCache {
 
     /**
      * 判断key是否存在
+     *
      * @param key 键
      * @return true 存在 false不存在
      */
@@ -147,6 +153,7 @@ public class RedisUtils implements RatelCache {
 
     /**
      * 删除缓存
+     *
      * @param key 可以传一个值 或多个
      */
     public void del(String... key) {
@@ -163,6 +170,7 @@ public class RedisUtils implements RatelCache {
 
     /**
      * 普通缓存获取
+     *
      * @param key 键
      * @return 值
      */
@@ -172,6 +180,7 @@ public class RedisUtils implements RatelCache {
 
     /**
      * 批量获取
+     *
      * @param keys
      * @return
      */
@@ -182,6 +191,7 @@ public class RedisUtils implements RatelCache {
 
     /**
      * 普通缓存放入
+     *
      * @param key   键
      * @param value 值
      * @return true成功 false失败
@@ -198,6 +208,7 @@ public class RedisUtils implements RatelCache {
 
     /**
      * 普通缓存放入并设置时间
+     *
      * @param key   键
      * @param value 值
      * @param time  时间(秒) time要大于0 如果time小于等于0 将设置无限期
@@ -219,9 +230,10 @@ public class RedisUtils implements RatelCache {
 
     /**
      * 普通缓存放入并设置时间
-     * @param key   键
-     * @param value 值
-     * @param time  时间
+     *
+     * @param key      键
+     * @param value    值
+     * @param time     时间
      * @param timeUnit 类型
      * @return true成功 false 失败
      */
@@ -243,6 +255,7 @@ public class RedisUtils implements RatelCache {
 
     /**
      * HashGet
+     *
      * @param key  键 不能为null
      * @param item 项 不能为null
      * @return 值
@@ -253,6 +266,7 @@ public class RedisUtils implements RatelCache {
 
     /**
      * 获取hashKey对应的所有键值
+     *
      * @param key 键
      * @return 对应的多个键值
      */
@@ -263,6 +277,7 @@ public class RedisUtils implements RatelCache {
 
     /**
      * HashSet
+     *
      * @param key 键
      * @param map 对应多个键值
      * @return true 成功 false 失败
@@ -279,6 +294,7 @@ public class RedisUtils implements RatelCache {
 
     /**
      * HashSet 并设置时间
+     *
      * @param key  键
      * @param map  对应多个键值
      * @param time 时间(秒)
@@ -433,6 +449,7 @@ public class RedisUtils implements RatelCache {
 
     /**
      * 将set数据放入缓存
+     *
      * @param key    键
      * @param time   时间(秒)
      * @param values 值 可以是多个
@@ -453,6 +470,7 @@ public class RedisUtils implements RatelCache {
 
     /**
      * 获取set缓存的长度
+     *
      * @param key 键
      * @return
      */
@@ -467,6 +485,7 @@ public class RedisUtils implements RatelCache {
 
     /**
      * 移除值为value的
+     *
      * @param key    键
      * @param values 值 可以是多个
      * @return 移除的个数
@@ -485,6 +504,7 @@ public class RedisUtils implements RatelCache {
 
     /**
      * 获取list缓存的内容
+     *
      * @param key   键
      * @param start 开始
      * @param end   结束 0 到 -1代表所有值
@@ -501,6 +521,7 @@ public class RedisUtils implements RatelCache {
 
     /**
      * 获取list缓存的长度
+     *
      * @param key 键
      * @return
      */
@@ -515,6 +536,7 @@ public class RedisUtils implements RatelCache {
 
     /**
      * 通过索引 获取list中的值
+     *
      * @param key   键
      * @param index 索引 index>=0时， 0 表头，1 第二个元素，依次类推；index<0时，-1，表尾，-2倒数第二个元素，依次类推
      * @return
@@ -530,6 +552,7 @@ public class RedisUtils implements RatelCache {
 
     /**
      * 将list放入缓存
+     *
      * @param key   键
      * @param value 值
      * @return
@@ -546,6 +569,7 @@ public class RedisUtils implements RatelCache {
 
     /**
      * 将list放入缓存
+     *
      * @param key   键
      * @param value 值
      * @param time  时间(秒)
@@ -566,6 +590,7 @@ public class RedisUtils implements RatelCache {
 
     /**
      * 将list放入缓存
+     *
      * @param key   键
      * @param value 值
      * @return
@@ -582,6 +607,7 @@ public class RedisUtils implements RatelCache {
 
     /**
      * 将list放入缓存
+     *
      * @param key   键
      * @param value 值
      * @param time  时间(秒)
@@ -602,6 +628,7 @@ public class RedisUtils implements RatelCache {
 
     /**
      * 根据索引修改list中的某条数据
+     *
      * @param key   键
      * @param index 索引
      * @param value 值
@@ -619,6 +646,7 @@ public class RedisUtils implements RatelCache {
 
     /**
      * 移除N个值为value
+     *
      * @param key   键
      * @param count 移除多少个
      * @param value 值

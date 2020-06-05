@@ -2,7 +2,7 @@ package com.ratel.modules.security.service;
 
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateUtil;
-import com.ratel.framework.cache.RatelCache;
+import com.ratel.framework.modules.cache.RatelCacheProvider;
 import com.ratel.modules.security.config.SecurityProperties;
 import com.ratel.modules.security.domain.vo.JwtUser;
 import com.ratel.modules.security.domain.vo.OnlineUser;
@@ -39,7 +39,7 @@ public class TokenProviderService implements InitializingBean {
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
-    private RatelCache ratelCache;
+    private RatelCacheProvider ratelCacheProvider;
     private static final String AUTHORITIES_KEY = "auth";
     private Key key;
 
@@ -132,14 +132,14 @@ public class TokenProviderService implements InitializingBean {
      */
     public void checkRenewal(String token) {
         // 判断是否续期token,计算token的过期时间
-        long time = ratelCache.getExpire(properties.getOnlineKey() + token) * 1000;
+        long time = ratelCacheProvider.getExpire(properties.getOnlineKey() + token) * 1000;
         Date expireDate = DateUtil.offset(new Date(), DateField.MILLISECOND, (int) time);
         // 判断当前时间与过期时间的时间差
         long differ = expireDate.getTime() - new Date().getTime();
         // 如果在续期检查的范围内，则续期
         if (differ <= properties.getDetect()) {
             long renew = time + properties.getRenew();
-            ratelCache.expire(properties.getOnlineKey() + token, renew, TimeUnit.MILLISECONDS);
+            ratelCacheProvider.expire(properties.getOnlineKey() + token, renew, TimeUnit.MILLISECONDS);
         }
     }
 }

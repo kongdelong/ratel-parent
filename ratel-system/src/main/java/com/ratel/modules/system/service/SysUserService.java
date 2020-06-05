@@ -1,8 +1,8 @@
 package com.ratel.modules.system.service;
 
-import com.ratel.framework.cache.RatelCache;
 import com.ratel.framework.exception.EntityExistException;
 import com.ratel.framework.exception.EntityNotFoundException;
+import com.ratel.framework.modules.cache.RatelCacheProvider;
 import com.ratel.framework.service.BaseService;
 import com.ratel.framework.utils.FileUtil;
 import com.ratel.framework.utils.QueryHelp;
@@ -46,7 +46,7 @@ public class SysUserService extends BaseService<SysUser, String> {
     private SysUserAvatarRepository sysUserAvatarRepository;
 
     @Autowired
-    private RatelCache ratelCache;
+    private RatelCacheProvider ratelCacheProvider;
 
     @Value("${file.avatar}")
     private String avatar;
@@ -101,9 +101,9 @@ public class SysUserService extends BaseService<SysUser, String> {
         // 如果用户的角色改变了，需要手动清理下缓存
         if (!resources.getSysRoles().equals(user.getSysRoles())) {
             String key = "role::loadPermissionByUser:" + user.getUsername();
-            ratelCache.del(key);
+            ratelCacheProvider.del(key);
             key = "role::findByUsers_Id:" + user.getId();
-            ratelCache.del(key);
+            ratelCacheProvider.del(key);
         }
 
         user.setUsername(resources.getUsername());

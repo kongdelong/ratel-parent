@@ -1,6 +1,6 @@
 package com.ratel.modules.security.service;
 
-import com.ratel.framework.cache.RatelCache;
+import com.ratel.framework.modules.cache.RatelCacheProvider;
 import com.ratel.framework.utils.EncryptUtils;
 import com.ratel.framework.utils.FileUtil;
 import com.ratel.framework.utils.StringUtils;
@@ -27,7 +27,7 @@ public class OnlineUserService {
     private SecurityProperties properties;
 
     @Autowired
-    private RatelCache ratelCache;
+    private RatelCacheProvider ratelCacheProvider;
 
 
     /**
@@ -48,7 +48,7 @@ public class OnlineUserService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ratelCache.set(properties.getOnlineKey() + token, onlineUser, properties.getTokenValidityInSeconds() / 1000);
+        ratelCacheProvider.set(properties.getOnlineKey() + token, onlineUser, properties.getTokenValidityInSeconds() / 1000);
         return onlineUser;
     }
 
@@ -71,11 +71,11 @@ public class OnlineUserService {
      * @return /
      */
     public List<OnlineUser> getAll(String filter) {
-        List<String> keys = ratelCache.scan(properties.getOnlineKey() + "*");
+        List<String> keys = ratelCacheProvider.scan(properties.getOnlineKey() + "*");
         Collections.reverse(keys);
         List<OnlineUser> onlineUsers = new ArrayList<>();
         for (String key : keys) {
-            OnlineUser onlineUser = (OnlineUser) ratelCache.get(key);
+            OnlineUser onlineUser = (OnlineUser) ratelCacheProvider.get(key);
             if (StringUtils.isNotBlank(filter)) {
                 if (onlineUser.toString().contains(filter)) {
                     onlineUsers.add(onlineUser);
@@ -96,7 +96,7 @@ public class OnlineUserService {
      */
     public void kickOut(String key) throws Exception {
         key = properties.getOnlineKey() + EncryptUtils.desDecrypt(key);
-        ratelCache.del(key);
+        ratelCacheProvider.del(key);
     }
 
     /**
@@ -106,7 +106,7 @@ public class OnlineUserService {
      */
     public void logout(String token) {
         String key = properties.getOnlineKey() + token;
-        ratelCache.del(key);
+        ratelCacheProvider.del(key);
     }
 
     /**
@@ -138,7 +138,7 @@ public class OnlineUserService {
      * @return /
      */
     public OnlineUser getOne(String key) {
-        return (OnlineUser) ratelCache.get(key);
+        return (OnlineUser) ratelCacheProvider.get(key);
     }
 
     /**

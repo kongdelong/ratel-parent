@@ -5,18 +5,22 @@
     <parent>
         <artifactId>ratel-parent</artifactId>
         <groupId>com.ratel</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>2.3.0.RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>ratel-boot</artifactId>
 
-
     <dependencies>
         <dependency>
             <groupId>com.ratel</groupId>
             <artifactId>ratel-system</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${ratel.framework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ratel</groupId>
+            <artifactId>ratel-cache-ehcache</artifactId>
+            <version>${ratel.framework.version}</version>
         </dependency>
     </dependencies>
 </project>

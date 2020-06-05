@@ -1,6 +1,7 @@
 package com.ratel.modules.system.domain;
 
 import com.ratel.framework.domain.BaseUuidEntity;
+import com.ratel.modules.system.config.JpaConverterListJson;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -10,9 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -82,4 +81,8 @@ public class SysUser extends BaseUuidEntity {
     public int hashCode() {
         return Objects.hash(id, username);
     }
+
+    @Convert(converter = JpaConverterListJson.class)
+    @Column(columnDefinition = "TEXT")
+    private List<Map<String, String>> extendAttribute;
 }

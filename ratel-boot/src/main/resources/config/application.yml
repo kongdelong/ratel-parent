@@ -21,8 +21,8 @@ spring:
       #允许出现特殊字符和转义符
       #allow_unquoted_control_chars: true
       #允许出现单引号
-      #allow_single_quotes: true
-      #设置空如何序列化
+    #allow_single_quotes: true
+    #设置空如何序列化
     #defaultPropertyInclusion: NON_EMPTY
 
   #配置 Jpa
@@ -57,6 +57,13 @@ ratel:
   #登录图形验证码有效时间/分钟
   loginCode:
     expiration: 2
+
+  #缓存设置
+  ehcache:
+    configFile: ehcache/ehcache-local.xml
+    defaultCacheName: sysCache
+#  ehcache:
+#    configFile: cache/ehcache-rmi.xml
 
 #密码加密传输，前端公钥加密，后端私钥解密
 rsa:

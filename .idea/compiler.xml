@@ -7,20 +7,26 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="ratel-framework" />
+        <module name="ratel-boot" />
+        <module name="ratel-cache-ehcache" />
         <module name="ratel-cache-redis" />
         <module name="ratel-system" />
+        <module name="ratel-oauth2-server" />
+        <module name="ratel-framework" />
+        <module name="ratel-oauth2-client" />
         <module name="ratel-log" />
-        <module name="ratel-boot" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ratel-boot" options="-parameters" />
+      <module name="ratel-cache-ehcache" options="-parameters" />
       <module name="ratel-cache-redis" options="-parameters" />
       <module name="ratel-framework" options="-parameters" />
       <module name="ratel-log" options="-parameters" />
+      <module name="ratel-oauth2-client" options="-parameters" />
+      <module name="ratel-oauth2-server" options="-parameters" />
       <module name="ratel-system" options="-parameters" />
     </option>
   </component>
