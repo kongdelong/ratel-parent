@@ -61,6 +61,8 @@ ratel:
 
   #登录图形验证码有效时间/分钟
   loginCode:
+    enableWeb: false
+    enableMobile: false
     expiration: 2
 
   #缓存设置

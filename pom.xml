@@ -7,7 +7,7 @@
     <groupId>com.ratel</groupId>
     <artifactId>ratel-parent</artifactId>
     <packaging>pom</packaging>
-    <version>2.3.0.RELEASE</version>
+    <version>0.0.1.RELEASE</version>
     <name>ratel-root</name>
 
     <modules>
@@ -43,9 +43,8 @@
         <jjwt.version>0.10.6</jjwt.version>
 
         <mybatis-spring-boot-starter.version>2.1.1</mybatis-spring-boot-starter.version>
-        <mybatis-spring-boot-starter.version>2.1.1</mybatis-spring-boot-starter.version>
-
-        <ratel.framework.version>2.3.0.RELEASE</ratel.framework.version>
+        <ratel.parent.version>0.0.1.RELEASE</ratel.parent.version>
+        <ratel.framework.version>0.0.1.RELEASE</ratel.framework.version>
     </properties>
 
     <dependencies>
@@ -143,6 +142,12 @@
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>${mybatis-spring-boot-starter.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.2.13</version>
         </dependency>
 
         <!-- fastjson -->

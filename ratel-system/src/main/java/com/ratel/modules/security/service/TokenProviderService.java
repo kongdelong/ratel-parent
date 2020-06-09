@@ -3,6 +3,7 @@ package com.ratel.modules.security.service;
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateUtil;
 import com.ratel.framework.modules.cache.RatelCacheProvider;
+import com.ratel.framework.utils.StringUtils;
 import com.ratel.modules.security.config.SecurityProperties;
 import com.ratel.modules.security.domain.vo.JwtUser;
 import com.ratel.modules.security.domain.vo.OnlineUser;
@@ -71,10 +72,10 @@ public class TokenProviderService implements InitializingBean {
                 .parseClaimsJws(token)
                 .getBody();
 
-        Collection<? extends GrantedAuthority> authorities =
+        Collection<? extends GrantedAuthority> authorities = StringUtils.isNotBlank(claims.get(AUTHORITIES_KEY).toString()) ?
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                         .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
+                        .collect(Collectors.toList()) : null;
 
         //JwtUser principal = new JwtUser(claims.getSubject(), "", authorities);
 //        UserDetails principal = userDetailsService.loadUserByUsername(claims.getSubject());

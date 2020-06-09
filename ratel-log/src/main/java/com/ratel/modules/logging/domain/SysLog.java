@@ -66,7 +66,7 @@ public class SysLog extends BaseUuidEntity {
     /**
      * 异常详细
      */
-    @Column(name = "exception_detail", columnDefinition = "text")
+    @Column(name = "exception_detail", columnDefinition = "MEDIUMTEXT")
     private byte[] exceptionDetail;
 
     public SysLog(String logType, Long time) {

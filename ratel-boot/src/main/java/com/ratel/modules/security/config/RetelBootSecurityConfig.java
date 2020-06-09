@@ -1,23 +1,56 @@
 package com.ratel.modules.security.config;
 
-
-import com.ratel.framework.modules.security.config.RetelSecurityConfig;
+import com.ratel.framework.annotation.security.AnonymousAccess;
+import com.ratel.modules.security.handler.JwtAccessDeniedHandler;
+import com.ratel.modules.security.handler.JwtAuthenticationEntryPoint;
+import com.ratel.modules.security.service.TokenProviderService;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-public class RetelBootSecurityConfig extends RetelSecurityConfig {
+public class RetelBootSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final TokenProviderService tokenProviderService;
+    private final CorsFilter corsFilter;
+    private final JwtAuthenticationEntryPoint authenticationErrorHandler;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final ApplicationContext applicationContext;
+
+    public RetelBootSecurityConfig(TokenProviderService tokenProviderService, CorsFilter corsFilter, JwtAuthenticationEntryPoint authenticationErrorHandler, JwtAccessDeniedHandler jwtAccessDeniedHandler, ApplicationContext applicationContext) {
+        this.tokenProviderService = tokenProviderService;
+        this.corsFilter = corsFilter;
+        this.authenticationErrorHandler = authenticationErrorHandler;
+        this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
+        this.applicationContext = applicationContext;
+    }
+
+
+    @Bean
+    GrantedAuthorityDefaults grantedAuthorityDefaults() {
+        // 去除 ROLE_ 前缀
+        return new GrantedAuthorityDefaults("");
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -25,27 +58,81 @@ public class RetelBootSecurityConfig extends RetelSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.addAllowedOrigin("*");
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
-        source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
+    @Override
+    protected void configure(HttpSecurity httpSecurity) throws Exception {
+        // 搜寻匿名标记 url： @AnonymousAccess
+        Map<RequestMappingInfo, HandlerMethod> handlerMethodMap = applicationContext.getBean("requestMappingHandlerMapping", RequestMappingHandlerMapping.class).getHandlerMethods();
+        Set<String> anonymousUrls = new HashSet<>();
+        for (Map.Entry<RequestMappingInfo, HandlerMethod> infoEntry : handlerMethodMap.entrySet()) {
+            HandlerMethod handlerMethod = infoEntry.getValue();
+            AnonymousAccess anonymousAccess = handlerMethod.getMethodAnnotation(AnonymousAccess.class);
+            if (null != anonymousAccess) {
+                anonymousUrls.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
+            }
+        }
+        httpSecurity
+                // 禁用 CSRF
+                .csrf().disable()
+                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
+                // 授权异常
+                .exceptionHandling()
+                .authenticationEntryPoint(authenticationErrorHandler)
+                .accessDeniedHandler(jwtAccessDeniedHandler)
+
+                // 防止iframe 造成跨域
+                .and()
+                .headers()
+                .frameOptions()
+                .disable()
+
+                // 不创建会话
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+                .and()
+                .authorizeRequests()
+                .antMatchers("/index.html").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                // 静态资源等等
+                .antMatchers(
+                        HttpMethod.GET,
+                        "/*.html",
+                        "/**/*.html",
+                        "/**/*.css",
+                        "/**/*.js",
+                        "/**/*.json",
+                        "/component/**",
+                        "/src/**",
+                        "/webSocket/**"
+                ).permitAll()
+                // swagger 文档
+                .antMatchers("/swagger-ui.html").permitAll()
+                .antMatchers("/swagger-resources/**").permitAll()
+                .antMatchers("/webjars/**").permitAll()
+                .antMatchers("/*/api-docs").permitAll()
+
+                //
+                .antMatchers("/vx/login").permitAll()
+                .antMatchers("/api/yndp/**").permitAll()
+                .antMatchers("/api/demo/**").permitAll()
+                // 文件
+                .antMatchers("/static/**").permitAll()
+                .antMatchers("/avatar/**").permitAll()
+                .antMatchers("/file/**").permitAll()
+                // 阿里巴巴 druid
+                .antMatchers("/druid/**").permitAll()
+                // 放行OPTIONS请求
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                // 自定义匿名访问所有url放行 ： 允许匿名和带权限以及登录用户访问
+                .antMatchers(anonymousUrls.toArray(new String[0])).permitAll()
+                // 所有请求都需要认证
+                .anyRequest().authenticated()
+                .and().apply(securityConfigurerAdapter());
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-        http.authorizeRequests().antMatchers("/**").permitAll();
-//                // swagger 文档
-//                .antMatchers("/swagger-ui.html").permitAll()
-//                .antMatchers("/swagger-resources/**").permitAll()
-//                .antMatchers("/webjars/**").permitAll()
-//                .antMatchers("/*/api-docs").permitAll();
+    private TokenConfigurer securityConfigurerAdapter() {
+        return new TokenConfigurer(tokenProviderService);
     }
 
 }

@@ -27,6 +27,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,6 +44,11 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping("/auth")
 @Api(tags = "系统：系统授权接口")
 public class AuthController {
+
+    @Value("${ratel.loginCode.enableWeb}")
+    private Boolean enableWeb;
+    @Value("${ratel.loginCode.enableMobile}")
+    private Boolean enableMobile;
 
     @Value("${ratel.loginCode.expiration}")
     private Long expiration;
@@ -62,17 +68,20 @@ public class AuthController {
     private TokenProviderService tokenProviderService;
     @Autowired
     private AuthenticationManagerBuilder authenticationManagerBuilder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @RatelLog("用户登录")
     @ApiOperation("登录授权")
     @AnonymousAccess
     @PostMapping(value = "/login")
     public ResponseEntity<Object> login(@Validated @RequestBody AuthUser authUser, HttpServletRequest request) {
+        System.out.println(passwordEncoder.encode("123456"));
         // 密码解密
         RSA rsa = new RSA(privateKey, null);
         String password = new String(rsa.decrypt(authUser.getPassword(), KeyType.PrivateKey));
-
-        if (!authUser.getClientType().equals("mobile")) {
+        if ((authUser.getClientType().equals("mobile") && enableMobile)
+                || (!authUser.getClientType().equals("mobile") && enableWeb)) {
             // 查询验证码
             String code = (String) ratelCacheProvider.get(authUser.getUuid());
             // 清除验证码

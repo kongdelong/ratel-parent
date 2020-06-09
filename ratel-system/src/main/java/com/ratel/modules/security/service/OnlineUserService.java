@@ -38,7 +38,7 @@ public class OnlineUserService {
      * @param request /
      */
     public OnlineUser save(JwtUser jwtUser, String token, HttpServletRequest request) {
-        String job = jwtUser.getDept() + "/" + jwtUser.getJob();
+        String job = jwtUser.getDept();
         String ip = StringUtils.getIp(request);
         String browser = StringUtils.getBrowser(request);
         String address = StringUtils.getCityInfo(ip);

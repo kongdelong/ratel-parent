@@ -69,7 +69,7 @@ public class RatelEchacheCacheProvider implements RatelCacheProvider {
         }
     }
 
-    public synchronized void set(String key, Object value, int expiration) {
+    public synchronized void setSynchronized(String key, Object value, int expiration) {
         log.debug(String.format("EhCachedProvider.set: key = %s value = %s expr = %d", key, value.toString(), expiration));
         try {
             cache.remove(key);
@@ -187,7 +187,7 @@ public class RatelEchacheCacheProvider implements RatelCacheProvider {
     @Override
     public boolean set(String key, Object value, long time) {
         try {
-            this.set(key, value, time);
+            this.setSynchronized(key, value, new Long(time).intValue());
             return true;
         } catch (Exception e) {
             e.printStackTrace();
