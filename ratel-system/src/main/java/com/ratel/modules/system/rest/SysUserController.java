@@ -64,7 +64,7 @@ public class SysUserController {
     @RatelLog("导出用户数据")
     @ApiOperation("导出用户数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('user:list')")
+    @PreAuthorize("@ratel.check('user:list')")
     public void download(HttpServletResponse response, SysUserQueryCriteria criteria) throws IOException {
         sysUserService.download(sysUserService.queryAll(criteria), response);
     }
@@ -72,7 +72,7 @@ public class SysUserController {
     @RatelLog("查询用户")
     @ApiOperation("查询用户")
     @GetMapping(value = "/getDeptsAndUsers")
-    @PreAuthorize("@el.check('user:list','accountmsg:add')")
+    @PreAuthorize("@ratel.check('user:list','accountmsg:add')")
     public ResponseEntity<Object> getDeptsAndUsers(SysUserQueryCriteria criteria, Pageable pageable) {
         Set<String> result = new HashSet<>();
         Set<String> deptIds = dataScope.getDeptIds();
@@ -107,7 +107,7 @@ public class SysUserController {
     @RatelLog("查询用户")
     @ApiOperation("查询用户")
     @GetMapping
-    @PreAuthorize("@el.check('user:list')")
+    @PreAuthorize("@ratel.check('user:list')")
     public ResponseEntity<Object> getUsers(SysUserQueryCriteria criteria, Pageable pageable) {
         Set<String> deptSet = new HashSet<>();
         Set<String> result = new HashSet<>();
@@ -141,7 +141,7 @@ public class SysUserController {
     @RatelLog("新增用户")
     @ApiOperation("新增用户")
     @PostMapping
-    @PreAuthorize("@el.check('user:add')")
+    @PreAuthorize("@ratel.check('user:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody SysUser resources) {
         checkLevel(resources);
         // 默认密码 123456
@@ -152,7 +152,7 @@ public class SysUserController {
     @RatelLog("修改用户")
     @ApiOperation("修改用户")
     @PutMapping
-    @PreAuthorize("@el.check('user:edit')")
+    @PreAuthorize("@ratel.check('user:edit')")
     public ResponseEntity<Object> update(@Validated(SysUser.Update.class) @RequestBody SysUser resources) {
         checkLevel(resources);
         sysUserService.update(resources);
@@ -174,7 +174,7 @@ public class SysUserController {
     @RatelLog("删除用户")
     @ApiOperation("删除用户")
     @DeleteMapping
-    @PreAuthorize("@el.check('user:del')")
+    @PreAuthorize("@ratel.check('user:del')")
     public ResponseEntity<Object> delete(@RequestBody Set<String> ids) {
         SysUser user = sysUserService.findByName(SecurityUtils.getUsername());
         for (String id : ids) {

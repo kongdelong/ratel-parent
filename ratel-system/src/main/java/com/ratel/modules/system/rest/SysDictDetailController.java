@@ -56,7 +56,7 @@ public class SysDictDetailController {
     @RatelLog("新增字典详情")
     @ApiOperation("新增字典详情")
     @PostMapping
-    @PreAuthorize("@el.check('dict:add')")
+    @PreAuthorize("@ratel.check('dict:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody SysDictDetail resources) {
         if (resources.getId() != null) {
             throw new BadRequestException("A new " + ENTITY_NAME + " cannot already have an ID");
@@ -67,7 +67,7 @@ public class SysDictDetailController {
     @RatelLog("修改字典详情")
     @ApiOperation("修改字典详情")
     @PutMapping
-    @PreAuthorize("@el.check('dict:edit')")
+    @PreAuthorize("@ratel.check('dict:edit')")
     public ResponseEntity<Object> update(@Validated(SysDictDetail.Update.class) @RequestBody SysDictDetail resources) {
         sysDictDetailService.update(resources);
         return FormsHttpEntity.ok();
@@ -76,7 +76,7 @@ public class SysDictDetailController {
     @RatelLog("删除字典详情")
     @ApiOperation("删除字典详情")
     @DeleteMapping(value = "/{id}")
-    @PreAuthorize("@el.check('dict:del')")
+    @PreAuthorize("@ratel.check('dict:del')")
     public ResponseEntity<Object> delete(@PathVariable String id) {
         sysDictDetailService.delete(id);
         return FormsHttpEntity.ok();

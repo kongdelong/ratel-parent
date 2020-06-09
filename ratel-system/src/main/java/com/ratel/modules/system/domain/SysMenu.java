@@ -25,7 +25,7 @@ public class SysMenu extends BaseUuidEntity {
     @NotBlank
     private String name;
 
-    @Column(unique = true)
+    @Column(unique = false)
     private Long sort = 999L;
 
     @Column(name = "path")
@@ -60,7 +60,7 @@ public class SysMenu extends BaseUuidEntity {
      * 上级菜单ID
      */
     @Column(name = "pid", nullable = false)
-    private Long pid;
+    private String pid;
 
     /**
      * 是否为外链 true/false

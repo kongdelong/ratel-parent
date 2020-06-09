@@ -27,5 +27,8 @@ public class MenuVo implements Serializable {
 
     private MenuMetaVo meta;
 
+    private String value;
+    private String title;
+
     private List<MenuVo> children;
 }

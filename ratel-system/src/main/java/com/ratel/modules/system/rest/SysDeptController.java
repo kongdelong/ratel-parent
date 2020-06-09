@@ -40,7 +40,7 @@ public class SysDeptController {
     @RatelLog("导出部门数据")
     @ApiOperation("导出部门数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('dept:list')")
+    @PreAuthorize("@ratel.check('dept:list')")
     public void download(HttpServletResponse response, SysDeptQueryCriteria criteria) throws IOException {
         sysDeptService.download(sysDeptService.queryAll(criteria), response);
     }
@@ -48,7 +48,7 @@ public class SysDeptController {
     @RatelLog("查询部门")
     @ApiOperation("查询部门")
     @GetMapping
-    @PreAuthorize("@el.check('user:list','dept:list')")
+    @PreAuthorize("@ratel.check('user:list','dept:list')")
     public ResponseEntity<Object> getDepts(SysDeptQueryCriteria criteria) {
         // 数据权限
         criteria.setIds(dataScope.getDeptIds());
@@ -59,7 +59,7 @@ public class SysDeptController {
     @RatelLog("新增部门")
     @ApiOperation("新增部门")
     @PostMapping
-    @PreAuthorize("@el.check('dept:add')")
+    @PreAuthorize("@ratel.check('dept:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody SysDept resources) {
         if (resources.getId() != null) {
             throw new BadRequestException("A new " + ENTITY_NAME + " cannot already have an ID");
@@ -76,7 +76,7 @@ public class SysDeptController {
     @RatelLog("修改部门")
     @ApiOperation("修改部门")
     @PutMapping
-    @PreAuthorize("@el.check('dept:edit')")
+    @PreAuthorize("@ratel.check('dept:edit')")
     public ResponseEntity<Object> update(@Validated(SysDept.Update.class) @RequestBody SysDept resources) {
         if (resources.getPid() != null && !"0".equals(resources.getPid())) {
             SysDept dept = sysDeptService.findOne(resources.getPid());
@@ -91,7 +91,7 @@ public class SysDeptController {
     @RatelLog("删除部门")
     @ApiOperation("删除部门")
     @DeleteMapping
-    @PreAuthorize("@el.check('dept:del')")
+    @PreAuthorize("@ratel.check('dept:del')")
     public ResponseEntity<Object> delete(@RequestBody Set<String> ids) {
         Set<SysDept> deptDtos = new HashSet<>();
         for (String id : ids) {

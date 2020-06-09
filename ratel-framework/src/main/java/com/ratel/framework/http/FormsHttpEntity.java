@@ -14,6 +14,7 @@ public class FormsHttpEntity {
     private Object content;
     private Integer errCode;
     private String errMsg;
+    private Boolean success = true;
 
 
     public FormsHttpEntity() {
@@ -28,6 +29,9 @@ public class FormsHttpEntity {
         this.content = content;
         this.errCode = errCode;
         this.errMsg = errMsg;
+        if (this.errCode != 0) {
+            this.success = false;
+        }
     }
 
     public static ResponseEntity ok() {
@@ -39,6 +43,7 @@ public class FormsHttpEntity {
     }
 
     public static ResponseEntity error(Object content, Integer errCode, String errMsg) {
+
         return new ResponseEntity(new FormsHttpEntity(content, errCode, errMsg), HttpStatus.OK);
     }
 

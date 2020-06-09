@@ -64,6 +64,25 @@ public class SysUser extends BaseUuidEntity {
     @JoinColumn(name = "sys_dept_id")
     private SysDept sysDept;
 
+    @Column(unique = false)
+    private Long sort = 999L;
+
+
+    @Column(name = "ext1")
+    private String ext1;
+
+    @Column(name = "ext2")
+    private String ext2;
+
+    @Column(name = "ext3")
+    private String ext3;
+
+    @Column(name = "ext4")
+    private String ext4;
+
+    @Column(name = "ext5")
+    private String ext5;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

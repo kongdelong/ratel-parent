@@ -28,7 +28,7 @@ public class SysStorageController {
 
     @ApiOperation("查询文件")
     @GetMapping
-    @PreAuthorize("@el.check('storage:list')")
+    @PreAuthorize("@ratel.check('storage:list')")
     public ResponseEntity<Object> getLocalStorages(SysStorageQueryCriteria criteria, Pageable pageable) {
         return new ResponseEntity<>(sysStorageService.queryAll(criteria, pageable), HttpStatus.OK);
     }
@@ -36,21 +36,21 @@ public class SysStorageController {
     @RatelLog("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('storage:list')")
+    @PreAuthorize("@ratel.check('storage:list')")
     public void download(HttpServletResponse response, SysStorageQueryCriteria criteria) throws IOException {
         sysStorageService.download(sysStorageService.queryAll(criteria), response);
     }
 
     @ApiOperation("上传文件")
     @PostMapping
-    @PreAuthorize("@el.check('storage:add')")
+    @PreAuthorize("@ratel.check('storage:add')")
     public ResponseEntity<Object> create(@RequestParam String name, @RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok(sysStorageService.create(name, file));
     }
 
     @ApiOperation("修改文件")
     @PutMapping
-    @PreAuthorize("@el.check('storage:edit')")
+    @PreAuthorize("@ratel.check('storage:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody SysStorage resources) {
         sysStorageService.update(resources);
         return new ResponseEntity<>(HttpStatus.OK);

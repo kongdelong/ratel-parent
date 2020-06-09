@@ -30,6 +30,8 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+#        session_factory:
+#          interceptor: com.ratel.framework.domain.interceptor.HibernateInterceptor
     open-in-view: true
 
 
@@ -49,8 +51,11 @@ task:
     # 队列容量
     queue-capacity: 50
 
-#邮箱验证码有效时间/分钟
+
 ratel:
+  permission:
+    check: false
+  #邮箱验证码有效时间/分钟
   code:
     expiration: 5
 

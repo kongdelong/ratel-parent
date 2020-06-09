@@ -45,7 +45,7 @@ public class SysRoleController {
 
     @ApiOperation("获取单个role")
     @GetMapping(value = "/{id}")
-    @PreAuthorize("@el.check('roles:list')")
+    @PreAuthorize("@ratel.check('roles:list')")
     public ResponseEntity<Object> getRoles(@PathVariable String id) {
         return FormsHttpEntity.ok(sysRoleService.findById(id));
     }
@@ -53,14 +53,14 @@ public class SysRoleController {
     @RatelLog("导出角色数据")
     @ApiOperation("导出角色数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('role:list')")
+    @PreAuthorize("@ratel.check('role:list')")
     public void download(HttpServletResponse response, SysRoleQueryCriteria criteria) throws IOException {
         sysRoleService.download(sysRoleService.queryAll(criteria), response);
     }
 
     @ApiOperation("返回全部的角色")
     @GetMapping(value = "/all")
-    @PreAuthorize("@el.check('roles:list','user:add','user:edit')")
+    @PreAuthorize("@ratel.check('roles:list','user:add','user:edit')")
     public ResponseEntity<Object> getAll(@PageableDefault(value = 2000, sort = {"level"}, direction = Sort.Direction.ASC) Pageable pageable) {
         return FormsHttpEntity.ok(sysRoleService.queryAll(pageable));
     }
@@ -68,7 +68,7 @@ public class SysRoleController {
     @RatelLog("查询角色")
     @ApiOperation("查询角色")
     @GetMapping
-    @PreAuthorize("@el.check('roles:list')")
+    @PreAuthorize("@ratel.check('roles:list')")
     public ResponseEntity<Object> getRoles(SysRoleQueryCriteria criteria, Pageable pageable) {
         return FormsHttpEntity.ok(sysRoleService.queryAll(criteria, pageable));
     }
@@ -82,7 +82,7 @@ public class SysRoleController {
     @RatelLog("新增角色")
     @ApiOperation("新增角色")
     @PostMapping
-    @PreAuthorize("@el.check('roles:add')")
+    @PreAuthorize("@ratel.check('roles:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody SysRole resources) {
         if (resources.getId() != null) {
             throw new BadRequestException("A new " + ENTITY_NAME + " cannot already have an ID");
@@ -94,7 +94,7 @@ public class SysRoleController {
     @RatelLog("修改角色")
     @ApiOperation("修改角色")
     @PutMapping
-    @PreAuthorize("@el.check('roles:edit')")
+    @PreAuthorize("@ratel.check('roles:edit')")
     public ResponseEntity<Object> update(@Validated(SysRole.Update.class) @RequestBody SysRole resources) {
         getLevels(resources.getLevel());
         sysRoleService.update(resources);
@@ -104,7 +104,7 @@ public class SysRoleController {
     @RatelLog("修改角色菜单")
     @ApiOperation("修改角色菜单")
     @PutMapping(value = "/menu")
-    @PreAuthorize("@el.check('roles:edit')")
+    @PreAuthorize("@ratel.check('roles:edit')")
     public ResponseEntity<Object> updateMenu(@RequestBody SysRole resources) {
         SysRole role = sysRoleService.findById(resources.getId());
         getLevels(role.getLevel());
@@ -115,7 +115,7 @@ public class SysRoleController {
     @RatelLog("删除角色")
     @ApiOperation("删除角色")
     @DeleteMapping
-    @PreAuthorize("@el.check('roles:del')")
+    @PreAuthorize("@ratel.check('roles:del')")
     public ResponseEntity<Object> delete(@RequestBody Set<String> ids) {
         for (String id : ids) {
             SysRole role = sysRoleService.findById(id);

@@ -44,7 +44,7 @@ public class SysMenuController {
     @RatelLog("导出菜单数据")
     @ApiOperation("导出菜单数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('menu:list')")
+    @PreAuthorize("@ratel.check('menu:list')")
     public void download(HttpServletResponse response, SysMenuQueryCriteria criteria) throws IOException {
         sysMenuService.download(sysMenuService.queryAll(criteria), response);
     }
@@ -60,7 +60,7 @@ public class SysMenuController {
 
     @ApiOperation("返回全部的菜单")
     @GetMapping(value = "/tree")
-    @PreAuthorize("@el.check('menu:list','roles:list')")
+    @PreAuthorize("@ratel.check('menu:list','roles:list')")
     public ResponseEntity<Object> getMenuTree() {
         return FormsHttpEntity.ok(sysMenuService.getMenuTree(sysMenuService.findByPid("0")));
     }
@@ -68,7 +68,7 @@ public class SysMenuController {
     @RatelLog("查询菜单")
     @ApiOperation("查询菜单")
     @GetMapping
-    @PreAuthorize("@el.check('menu:list')")
+    @PreAuthorize("@ratel.check('menu:list')")
     public ResponseEntity<Object> getMenus(SysMenuQueryCriteria criteria) {
         List<SysMenu> menuDtoList = sysMenuService.queryAll(criteria);
         return FormsHttpEntity.ok(sysMenuService.buildTree(menuDtoList));
@@ -77,7 +77,7 @@ public class SysMenuController {
     @RatelLog("新增菜单")
     @ApiOperation("新增菜单")
     @PostMapping
-    @PreAuthorize("@el.check('menu:add')")
+    @PreAuthorize("@ratel.check('menu:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody SysMenu resources) {
         if (resources.getId() != null) {
             throw new BadRequestException("A new " + ENTITY_NAME + " cannot already have an ID");
@@ -88,7 +88,7 @@ public class SysMenuController {
     @RatelLog("修改菜单")
     @ApiOperation("修改菜单")
     @PutMapping
-    @PreAuthorize("@el.check('menu:edit')")
+    @PreAuthorize("@ratel.check('menu:edit')")
     public ResponseEntity<Object> update(@Validated(SysMenu.Update.class) @RequestBody SysMenu resources) {
         sysMenuService.update(resources);
         return FormsHttpEntity.ok();
@@ -97,7 +97,7 @@ public class SysMenuController {
     @RatelLog("删除菜单")
     @ApiOperation("删除菜单")
     @DeleteMapping
-    @PreAuthorize("@el.check('menu:del')")
+    @PreAuthorize("@ratel.check('menu:del')")
     public ResponseEntity<Object> delete(@RequestBody Set<String> ids) {
         Set<SysMenu> menuSet = new HashSet<>();
         for (String id : ids) {

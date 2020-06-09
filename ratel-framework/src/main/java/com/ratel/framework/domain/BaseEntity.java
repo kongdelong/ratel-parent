@@ -31,42 +31,42 @@ public abstract class BaseEntity<ID extends Serializable> extends AbstractPersis
     //private Integer version = 0;
 
     @Column(name = "create_user_name", length = 256, updatable = false)
-    private String createUserName = GlobalConstant.NONE_VALUE;
+    protected String createUserName = GlobalConstant.NONE_VALUE;
 
     @Column(name = "create_user_id", length = 256, updatable = false)
-    private String createUserId;
+    protected String createUserId;
 
     @Column(name = "create_time", updatable = false)
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime;
+    protected Date createTime;
 
     @Column(name = "update_user_name", length = 256)
-    private String updateUserName;
+    protected String updateUserName;
 
     @Column(name = "update_user_id", length = 256)
-    private String updateUserId;
+    protected String updateUserId;
 
     @Column(name = "update_time")
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date updateTime;
+    protected Date updateTime;
 
     @Column(name = "dept_id")
-    private String deptId;
+    protected String deptId;
 
     //	@MetaData(value = "数据隔离域", comments = "类似Windows域的概念，进行用户数据隔离")
     @Column(name = "data_domain", length = 100, updatable = false)
-    private String dataDomain;
+    protected String dataDomain;
 
     //	@MetaData(value = "系统备注说明", comments = "预留一个通用的系统备注字段，业务根据需要合理使用")
-    @Column(name = "description", length = 1000, updatable = true)
-    private String description;
+    @Column(name = "description", length = 1000)
+    protected String description;
 
     @Column(name = "enable", length = 1)
-    private String enable = GlobalConstant.STATUS_VALUE;
+    protected String enable = GlobalConstant.STATUS_VALUE;
 
     private static final String[] PROPERTY_LIST = new String[]{"id", "version"};
 

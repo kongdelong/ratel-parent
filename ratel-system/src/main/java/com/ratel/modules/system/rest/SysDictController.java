@@ -39,7 +39,7 @@ public class SysDictController {
     @RatelLog("查询字典")
     @ApiOperation("查询字典")
     @GetMapping(value = "/all")
-    @PreAuthorize("@el.check('dict:list')")
+    @PreAuthorize("@ratel.check('dict:list')")
     public ResponseEntity<Object> all() {
         return FormsHttpEntity.ok(sysDictService.queryAll(new SysDictQueryCriteria()));
     }
@@ -47,7 +47,7 @@ public class SysDictController {
     @RatelLog("查询字典")
     @ApiOperation("查询字典")
     @GetMapping
-    @PreAuthorize("@el.check('dict:list')")
+    @PreAuthorize("@ratel.check('dict:list')")
     public ResponseEntity<Object> getDicts(SysDictQueryCriteria resources, Pageable pageable) {
         return FormsHttpEntity.ok(sysDictService.queryAll(resources, pageable));
     }
@@ -55,7 +55,7 @@ public class SysDictController {
     @RatelLog("新增字典")
     @ApiOperation("新增字典")
     @PostMapping
-    @PreAuthorize("@el.check('dict:add')")
+    @PreAuthorize("@ratel.check('dict:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody SysDict resources) {
         if (resources.getId() != null) {
             throw new BadRequestException("A new " + ENTITY_NAME + " cannot already have an ID");
@@ -66,7 +66,7 @@ public class SysDictController {
     @RatelLog("修改字典")
     @ApiOperation("修改字典")
     @PutMapping
-    @PreAuthorize("@el.check('dict:edit')")
+    @PreAuthorize("@ratel.check('dict:edit')")
     public ResponseEntity<Object> update(@Validated(SysDict.Update.class) @RequestBody SysDict resources) {
         sysDictService.update(resources);
         return FormsHttpEntity.ok();
@@ -75,7 +75,7 @@ public class SysDictController {
     @RatelLog("删除字典")
     @ApiOperation("删除字典")
     @DeleteMapping(value = "/{id}")
-    @PreAuthorize("@el.check('dict:del')")
+    @PreAuthorize("@ratel.check('dict:del')")
     public ResponseEntity<Object> delete(@PathVariable String id) {
         sysDictService.delete(id);
         return FormsHttpEntity.ok();
