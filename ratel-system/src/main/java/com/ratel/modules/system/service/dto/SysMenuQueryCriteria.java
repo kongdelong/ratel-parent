@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 公共查询类
@@ -14,6 +15,9 @@ public class SysMenuQueryCriteria {
 
     @Query(blurry = "name,path,component")
     private String blurry;
+
+    @Query(type = Query.Type.IN, propName = "type")
+    private Set<Integer> types;
 
     @Query(type = Query.Type.BETWEEN)
     private List<Timestamp> createTime;

@@ -72,6 +72,9 @@ public class SysRoleService extends BaseService<SysRole, String> {
         if (sysRoleRepository.findByName(resources.getName()) != null) {
             throw new EntityExistException(SysRole.class, "username", resources.getName());
         }
+        if (sysRoleRepository.findByPermission(resources.getPermission()) != null) {
+            throw new EntityExistException(SysRole.class, "permission", resources.getPermission());
+        }
         return sysRoleRepository.save(resources);
     }
 
@@ -96,6 +99,7 @@ public class SysRoleService extends BaseService<SysRole, String> {
         role.setSysDepts(resources.getSysDepts());
         role.setLevel(resources.getLevel());
         role.setPermission(resources.getPermission());
+        role.setDescription(resources.getDescription());
         sysRoleRepository.save(role);
     }
 

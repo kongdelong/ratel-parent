@@ -17,16 +17,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebMvc
 public class ConfigurerAdapter implements WebMvcConfigurer {
 
-    @Value("${file.path}")
+    @Value("${ratel.file.path}")
     private String path;
 
-    @Value("${file.avatar}")
+    @Value("${ratel.file.avatar}")
     private String avatar;
 
-    @Value("${file.html}")
+    @Value("${ratel.file.html}")
     private String html;
 
-    @Value("${file.jarHtml}")
+    @Value("${ratel.file.jarHtml}")
     private String jarHtml;
 
     @Bean

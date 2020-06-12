@@ -32,13 +32,13 @@ import static springfox.documentation.schema.AlternateTypeRules.newRule;
 @EnableSwagger2
 public class SwaggerConfig {
 
-    @Value("${jwt.header}")
+    @Value("${ratel.jwt.header}")
     private String tokenHeader;
 
-    @Value("${jwt.token-start-with}")
+    @Value("${ratel.jwt.token-start-with}")
     private String tokenStartWith;
 
-    @Value("${swagger.enabled}")
+    @Value("${ratel.framework.swagger-enabled}")
     private Boolean enabled;
 
     @Bean

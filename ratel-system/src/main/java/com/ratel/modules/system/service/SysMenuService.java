@@ -245,15 +245,15 @@ public class SysMenuService extends BaseService<SysMenu, Long> {
 
     public void download(List<SysMenu> SysMenus, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (SysMenu SysMenu : SysMenus) {
+        for (SysMenu sysMenu : SysMenus) {
             Map<String, Object> map = new LinkedHashMap<>();
-            map.put("菜单名称", SysMenu.getName());
-            map.put("菜单类型", SysMenu.getType() == 0 ? "目录" : SysMenu.getType() == 1 ? "菜单" : "按钮");
-            map.put("权限标识", SysMenu.getPermission());
-            map.put("外链菜单", SysMenu.getIFrame() ? "是" : "否");
-            map.put("菜单可见", SysMenu.getHidden() ? "否" : "是");
-            map.put("是否缓存", SysMenu.getCache() ? "是" : "否");
-            map.put("创建日期", SysMenu.getCreateTime());
+            map.put("菜单名称", sysMenu.getName());
+            map.put("菜单类型", sysMenu.getType() == 0 ? "目录" : sysMenu.getType() == 1 ? "菜单" : "按钮");
+            map.put("权限标识", sysMenu.getPermission());
+            map.put("外链菜单", sysMenu.getIFrame() ? "是" : "否");
+            map.put("菜单可见", sysMenu.getHidden() ? "否" : "是");
+            map.put("是否缓存", sysMenu.getCache() ? "是" : "否");
+            map.put("创建日期", sysMenu.getCreateTime());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

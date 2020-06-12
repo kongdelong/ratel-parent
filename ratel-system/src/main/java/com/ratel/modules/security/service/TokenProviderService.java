@@ -5,6 +5,7 @@ import cn.hutool.core.date.DateUtil;
 import com.ratel.framework.modules.cache.RatelCacheProvider;
 import com.ratel.framework.utils.StringUtils;
 import com.ratel.modules.security.config.SecurityProperties;
+import com.ratel.modules.security.domain.vo.AuthCredentials;
 import com.ratel.modules.security.domain.vo.JwtUser;
 import com.ratel.modules.security.domain.vo.OnlineUser;
 import io.jsonwebtoken.*;
@@ -80,7 +81,7 @@ public class TokenProviderService implements InitializingBean {
         //JwtUser principal = new JwtUser(claims.getSubject(), "", authorities);
 //        UserDetails principal = userDetailsService.loadUserByUsername(claims.getSubject());
         UserDetails principal = onlineUser.getJwtUser();
-        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+        return new UsernamePasswordAuthenticationToken(principal, new AuthCredentials(token), authorities);
     }
 
 

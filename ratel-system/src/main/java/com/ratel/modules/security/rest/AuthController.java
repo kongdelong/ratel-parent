@@ -10,8 +10,10 @@ import com.ratel.framework.modules.cache.RatelCacheProvider;
 import com.ratel.framework.utils.SecurityUtils;
 import com.ratel.framework.utils.StringUtils;
 import com.ratel.modules.security.config.SecurityProperties;
+import com.ratel.modules.security.domain.vo.AuthCredentials;
 import com.ratel.modules.security.domain.vo.AuthUser;
 import com.ratel.modules.security.domain.vo.JwtUser;
+import com.ratel.modules.security.service.AuthService;
 import com.ratel.modules.security.service.OnlineUserService;
 import com.ratel.modules.security.service.TokenProviderService;
 import com.wf.captcha.ArithmeticCaptcha;
@@ -22,12 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,9 +50,9 @@ public class AuthController {
 
     @Value("${ratel.loginCode.expiration}")
     private Long expiration;
-    @Value("${rsa.private_key}")
+    @Value("${ratel.rsa.private_key}")
     private String privateKey;
-    @Value("${single.login:false}")
+    @Value("${ratel.single.login:false}")
     private Boolean singleLogin;
     @Autowired
     private SecurityProperties properties;
@@ -69,14 +67,13 @@ public class AuthController {
     @Autowired
     private AuthenticationManagerBuilder authenticationManagerBuilder;
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private AuthService authService;
 
     @RatelLog("用户登录")
     @ApiOperation("登录授权")
     @AnonymousAccess
     @PostMapping(value = "/login")
     public ResponseEntity<Object> login(@Validated @RequestBody AuthUser authUser, HttpServletRequest request) {
-        System.out.println(passwordEncoder.encode("123456"));
         // 密码解密
         RSA rsa = new RSA(privateKey, null);
         String password = new String(rsa.decrypt(authUser.getPassword(), KeyType.PrivateKey));
@@ -94,27 +91,7 @@ public class AuthController {
                 throw new BadRequestException("验证码错误");
             }
         }
-
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(authUser.getUsername(), password);
-
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        // 生成令牌
-        String token = tokenProviderService.createToken(authentication);
-        final JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
-        // 保存在线信息
-        onlineUserService.save(jwtUser, token, request);
-        // 返回 token 与 用户信息
-        Map<String, Object> authInfo = new HashMap<String, Object>(2) {{
-            put("token", properties.getTokenStartWith() + token);
-            put("user", jwtUser);
-        }};
-        if (singleLogin) {
-            //踢掉之前已经登录的token
-            onlineUserService.checkLoginOnUser(authUser.getUsername(), token);
-        }
-        return ResponseEntity.ok(authInfo);
+        return ResponseEntity.ok(authService.getAuthUserMap(authUser.getUsername(), new AuthCredentials(password), request));
     }
 
     @ApiOperation("获取用户信息")

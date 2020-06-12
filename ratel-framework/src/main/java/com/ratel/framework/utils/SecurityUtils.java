@@ -1,7 +1,10 @@
 package com.ratel.framework.utils;
 
 import cn.hutool.json.JSONObject;
+import com.ratel.framework.config.RatelProperties;
 import com.ratel.framework.exception.BadRequestException;
+import com.ratel.framework.modules.system.domain.RatelUser;
+import com.ratel.framework.modules.system.domain.RatelUserImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,7 +19,14 @@ public class SecurityUtils {
         try {
             userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         } catch (Exception e) {
-            throw new BadRequestException(HttpStatus.UNAUTHORIZED, "登录状态过期");
+            RatelProperties ratelProperties = SpringContextHolder.getBean("ratelProperties");
+            if (ratelProperties.getSecurity()) {
+                throw new BadRequestException(HttpStatus.UNAUTHORIZED, "登录状态过期");
+            } else {
+                RatelUser ratelUser = new RatelUserImpl();
+                ratelUser.setUsername(ratelProperties.getUsername());
+                userDetails = ratelUser;
+            }
         }
         return userDetails;
     }

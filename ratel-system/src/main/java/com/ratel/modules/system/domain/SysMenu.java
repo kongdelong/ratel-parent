@@ -25,7 +25,7 @@ public class SysMenu extends BaseUuidEntity {
     @NotBlank
     private String name;
 
-    @Column(unique = false)
+    @Column(name = "sort")
     private Long sort = 999L;
 
     @Column(name = "path")

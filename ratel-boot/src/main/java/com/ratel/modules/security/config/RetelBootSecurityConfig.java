@@ -4,10 +4,13 @@ import com.ratel.framework.annotation.security.AnonymousAccess;
 import com.ratel.modules.security.handler.JwtAccessDeniedHandler;
 import com.ratel.modules.security.handler.JwtAuthenticationEntryPoint;
 import com.ratel.modules.security.service.TokenProviderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -37,12 +40,23 @@ public class RetelBootSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final ApplicationContext applicationContext;
 
-    public RetelBootSecurityConfig(TokenProviderService tokenProviderService, CorsFilter corsFilter, JwtAuthenticationEntryPoint authenticationErrorHandler, JwtAccessDeniedHandler jwtAccessDeniedHandler, ApplicationContext applicationContext) {
+
+    public RetelBootSecurityConfig(TokenProviderService tokenProviderService,
+                                   CorsFilter corsFilter,
+                                   JwtAuthenticationEntryPoint authenticationErrorHandler,
+                                   JwtAccessDeniedHandler jwtAccessDeniedHandler,
+                                   ApplicationContext applicationContext) {
         this.tokenProviderService = tokenProviderService;
         this.corsFilter = corsFilter;
         this.authenticationErrorHandler = authenticationErrorHandler;
         this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
         this.applicationContext = applicationContext;
+
+    }
+
+    @Autowired
+    public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authenticationProvider());
     }
 
 
@@ -56,6 +70,11 @@ public class RetelBootSecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         // 密码加密方式
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        return new RatelAuthenticationProvider();
     }
 
     @Override

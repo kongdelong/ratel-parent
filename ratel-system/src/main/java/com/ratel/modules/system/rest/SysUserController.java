@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/sys/users")
 public class SysUserController {
 
-    @Value("${rsa.private_key}")
+    @Value("${ratel.rsa.private_key}")
     private String privateKey;
 
     @Autowired

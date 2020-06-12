@@ -7,7 +7,7 @@
     <groupId>com.ratel</groupId>
     <artifactId>ratel-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.1.RELEASE</version>
+    <version>0.0.4.RELEASE</version>
     <name>ratel-root</name>
 
     <modules>
@@ -38,13 +38,12 @@
         <druid.version>1.1.10</druid.version>
         <commons-pool2.version>2.5.0</commons-pool2.version>
         <mapstruct.version>1.2.0.Final</mapstruct.version>
-
         <hutool.version>5.0.6</hutool.version>
         <jjwt.version>0.10.6</jjwt.version>
-
         <mybatis-spring-boot-starter.version>2.1.1</mybatis-spring-boot-starter.version>
-        <ratel.parent.version>0.0.1.RELEASE</ratel.parent.version>
-        <ratel.framework.version>0.0.1.RELEASE</ratel.framework.version>
+
+        <ratel.parent.version>0.0.4.RELEASE</ratel.parent.version>
+
     </properties>
 
     <dependencies>

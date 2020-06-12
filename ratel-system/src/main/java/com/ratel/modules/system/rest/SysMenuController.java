@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -54,8 +55,9 @@ public class SysMenuController {
     public ResponseEntity<Object> buildMenus() {
         SysUser user = sysUserService.findByName(SecurityUtils.getUsername());
         List<SysMenu> menuDtoList = sysMenuService.findByRoles(sysRoleService.findByUsersId(user.getId()));
-        List<SysMenu> menuDtos = (List<SysMenu>) sysMenuService.buildTree(menuDtoList).get("content");
-        return FormsHttpEntity.ok(sysMenuService.buildMenus(menuDtos));
+//        List<SysMenu> menuDtos = (List<SysMenu>) sysMenuService.buildTree(menuDtoList).get("content");
+//        return FormsHttpEntity.ok(sysMenuService.buildMenus(menuDtos));
+        return FormsHttpEntity.ok(menuDtoList);
     }
 
     @ApiOperation("返回全部的菜单")
@@ -63,6 +65,18 @@ public class SysMenuController {
     @PreAuthorize("@ratel.check('menu:list','roles:list')")
     public ResponseEntity<Object> getMenuTree() {
         return FormsHttpEntity.ok(sysMenuService.getMenuTree(sysMenuService.findByPid("0")));
+    }
+
+    @ApiOperation("返回全部的菜单")
+    @GetMapping(value = "/list")
+    @PreAuthorize("@ratel.check('menu:list','roles:list')")
+    public ResponseEntity<Object> getMenuList() {
+        SysMenuQueryCriteria criteria = new SysMenuQueryCriteria();
+        Set list = new HashSet();
+        list.add(0);
+        list.add(1);
+        criteria.setTypes((Set<Integer>) list);
+        return FormsHttpEntity.ok(sysMenuService.queryAll(criteria));
     }
 
     @RatelLog("查询菜单")

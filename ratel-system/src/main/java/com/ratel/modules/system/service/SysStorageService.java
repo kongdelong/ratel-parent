@@ -35,10 +35,10 @@ public class SysStorageService extends BaseService<SysStorage, String> {
     @Autowired
     private SysStorageRepository sysStorageRepository;
 
-    @Value("${file.path}")
+    @Value("${ratel.file.path}")
     private String path;
 
-    @Value("${file.maxSize}")
+    @Value("${ratel.file.maxSize}")
     private long maxSize;
 
     @Cacheable

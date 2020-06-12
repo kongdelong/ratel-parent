@@ -49,54 +49,49 @@ spring:
       # 生产环境设置成 none，避免程序运行时自动更新数据库结构 update
       ddl-auto: update
 
-# security
-security:
-  basic:
-  enabled: false
-
 pagehelper:
   helperDialect: mysql
   reasonable: true
   supportMethodsArguments: true
   params: count=countSql
 
-#jwt
-jwt:
-  header: Authorization
-  # 令牌前缀
-  token-start-with: Bearer
-  # 必须使用最少88位的Base64对该令牌进行编码
-  base64-secret: ZmQ0ZGI5NjQ0MDQwY2I4MjMxY2Y3ZmI3MjdhN2ZmMjNhODViOTg1ZGE0NTBjMGM4NDA5NzYxMjdjOWMwYWRmZTBlZjlhNGY3ZTg4Y2U3YTE1ODVkZDU5Y2Y3OGYwZWE1NzUzNWQ2YjFjZDc0NGMxZWU2MmQ3MjY1NzJmNTE0MzI=
-  # 令牌过期时间 此处单位/毫秒 ，默认4小时，可在此网站生成 https://www.convertworld.com/zh-hans/time/milliseconds.html
-  token-validity-in-seconds: 14400000
-  # 在线用户key
-  online-key: online-token
-  # 验证码
-  code-key: code-key
-  # token 续期检查时间范围（默认30分钟，单位毫秒），在token即将过期的一段时间内用户操作了，则给用户的token续期
-  detect: 1800000
-  # 续期时间范围，默认1小时，单位毫秒
-  renew: 3600000
+ratel:
+  framework:
+    #是否开启 swagger-ui
+    swagger-enabled: true
 
-#是否允许生成代码，生产环境设置为false
-generator:
-  enabled: true
+  # 文件存储路径
+  file:
+    #path: /Users/dongchuang/Downloads/rtadmin/file/
+    #avatar: /Users/dongchuang/Downloads/rtadmin/avatar/
+    path: /data/rate_app/file/
+    avatar: /data/rate_app/avatar/
+    jarHtml: classpath:/html/  # none - 代表不实用jar包 中的静态文件
+    html: /home/Devops/ynyq/html/
+    #  jarHtml: none  #classpath:/html/  # none - 代表不实用jar包 中的静态文件
+    #  html: D:\code\yn_yq\rtadmin-server\rtadmin-run\src\main\resources\html\
+    # 文件大小 /M
+    maxSize: 100
+    avatarMaxSize: 5
 
-#是否开启 swagger-ui
-swagger:
-  enabled: true
+  #jwt
+  jwt:
+    header: Authorization
+    # 令牌前缀
+    token-start-with: Bearer
+    # 必须使用最少88位的Base64对该令牌进行编码
+    base64-secret: ZmQ0ZGI5NjQ0MDQwY2I4MjMxY2Y3ZmI3MjdhN2ZmMjNhODViOTg1ZGE0NTBjMGM4NDA5NzYxMjdjOWMwYWRmZTBlZjlhNGY3ZTg4Y2U3YTE1ODVkZDU5Y2Y3OGYwZWE1NzUzNWQ2YjFjZDc0NGMxZWU2MmQ3MjY1NzJmNTE0MzI=
+    # 令牌过期时间 此处单位/毫秒 ，默认4小时，可在此网站生成 https://www.convertworld.com/zh-hans/time/milliseconds.html
+    token-validity-in-seconds: 14400000
+    # 在线用户key
+    online-key: online-token
+    # 验证码
+    code-key: code-key
+    # token 续期检查时间范围（默认30分钟，单位毫秒），在token即将过期的一段时间内用户操作了，则给用户的token续期
+    detect: 1800000
+    # 续期时间范围，默认1小时，单位毫秒
+    renew: 3600000
 
-# 文件存储路径
-file:
-  #path: /Users/dongchuang/Downloads/rtadmin/file/
-  #avatar: /Users/dongchuang/Downloads/rtadmin/avatar/
-  path: /data/rate_app/file/
-  avatar: /data/rate_app/avatar/
-  jarHtml: classpath:/html/  # none - 代表不实用jar包 中的静态文件
-  html: /home/Devops/ynyq/html/
-  #  jarHtml: none  #classpath:/html/  # none - 代表不实用jar包 中的静态文件
-  #  html: D:\code\yn_yq\rtadmin-server\rtadmin-run\src\main\resources\html\
-  # 文件大小 /M
-  maxSize: 100
-  avatarMaxSize: 5
-
+  #是否允许生成代码，生产环境设置为false
+  generator:
+      enabled: true

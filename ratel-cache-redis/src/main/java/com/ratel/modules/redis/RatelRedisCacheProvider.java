@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class RatelRedisCacheProvider implements RatelCacheProvider {
 
     private RedisTemplate<Object, Object> redisTemplate;
-    @Value("${jwt.online-key}")
+    @Value("${ratel.jwt.online-key}")
     private String onlineKey;
 
     public RatelRedisCacheProvider(RedisTemplate<Object, Object> redisTemplate) {

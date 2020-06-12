@@ -5,18 +5,17 @@
     <parent>
         <artifactId>ratel-parent</artifactId>
         <groupId>com.ratel</groupId>
-        <version>0.0.1.RELEASE</version>
+        <version>0.0.4.RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>ratel-log</artifactId>
 
     <dependencies>
-
         <dependency>
             <groupId>com.ratel</groupId>
             <artifactId>ratel-framework</artifactId>
-            <version>${ratel.framework.version}</version>
+            <version>${ratel.parent.version}</version>
         </dependency>
     </dependencies>
 </project>

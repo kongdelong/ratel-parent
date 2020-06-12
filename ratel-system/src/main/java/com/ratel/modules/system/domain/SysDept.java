@@ -30,6 +30,9 @@ public class SysDept extends BaseUuidEntity {
     @NotNull
     private Boolean enabled;
 
+    @Column(name = "sort")
+    private Long sort = 999L;
+
     @Transient
     public List<SysDept> children;
 

@@ -48,7 +48,7 @@ public class SysUserService extends BaseService<SysUser, String> {
     @Autowired
     private RatelCacheProvider ratelCacheProvider;
 
-    @Value("${file.avatar}")
+    @Value("${ratel.file.avatar}")
     private String avatar;
 
     @Cacheable
