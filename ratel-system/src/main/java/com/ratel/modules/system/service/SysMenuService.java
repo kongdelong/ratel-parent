@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,8 +42,8 @@ public class SysMenuService extends BaseService<SysMenu, Long> {
 
     @Cacheable
     public List<SysMenu> queryAll(SysMenuQueryCriteria criteria) {
-//        Sort sort = new Sort(Sort.Direction.DESC,"id");
-        return sysMenuRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder));
+        Sort sort = Sort.by(Sort.Direction.ASC, "sort");
+        return sysMenuRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder), sort);
     }
 
     @Cacheable(key = "#p0")

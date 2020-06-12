@@ -78,7 +78,8 @@ public class SysStorageService extends BaseService<SysStorage, String> {
                     file.getPath(),
                     type,
                     FileUtil.getSize(multipartFile.getSize()),
-                    SecurityUtils.getUsername()
+                    SecurityUtils.getUsername(),
+                    "file" + File.separator + file.getPath().replace(path, "")
             );
             return sysStorageRepository.save(localStorage);
         } catch (Exception e) {

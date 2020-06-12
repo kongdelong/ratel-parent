@@ -54,13 +54,16 @@ public class SysStorage extends BaseUuidEntity {
     @Column(name = "size")
     private String size;
 
+    @Column(name = "attr_path")
+    private String attrPath;
+
     /**
      * 操作人
      */
     @Column(name = "operate")
     private String operate;
 
-    public SysStorage(String realName, String name, String suffix, String path, String type, String size, String operate) {
+    public SysStorage(String realName, String name, String suffix, String path, String type, String size, String operate, String attrPath) {
         this.realName = realName;
         this.name = name;
         this.suffix = suffix;
@@ -68,6 +71,7 @@ public class SysStorage extends BaseUuidEntity {
         this.type = type;
         this.size = size;
         this.operate = operate;
+        this.attrPath = attrPath;
     }
 
     public void copy(SysStorage source) {
