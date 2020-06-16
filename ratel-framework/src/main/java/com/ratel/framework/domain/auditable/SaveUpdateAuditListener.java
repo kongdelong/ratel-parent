@@ -32,10 +32,10 @@ public class SaveUpdateAuditListener {
         try {
             RatelUser user = (RatelUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             auditable.setCreateUserId(user.getId());
-            auditable.setCreateUserName(user.getUsername());
+            auditable.setCreateUserName(user.getNickName());
             auditable.setDeptId(user.getDeptId());
             auditable.setUpdateUserId(user.getId());
-            auditable.setUpdateUserName(user.getUsername());
+            auditable.setUpdateUserName(user.getNickName());
         } catch (Exception e) {
 
         }
@@ -52,7 +52,7 @@ public class SaveUpdateAuditListener {
         try {
             RatelUser user = (RatelUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             auditable.setUpdateUserId(user.getId());
-            auditable.setUpdateUserName(user.getUsername());
+            auditable.setUpdateUserName(user.getNickName());
         } catch (Exception e) {
 
         }

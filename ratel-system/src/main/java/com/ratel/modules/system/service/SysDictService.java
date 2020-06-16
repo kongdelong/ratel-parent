@@ -2,12 +2,14 @@ package com.ratel.modules.system.service;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.db.PageResult;
+import com.ratel.framework.exception.EntityExistException;
 import com.ratel.framework.service.BaseService;
 import com.ratel.framework.utils.FileUtil;
 import com.ratel.framework.utils.QueryHelp;
 import com.ratel.framework.utils.ValidationUtil;
 import com.ratel.modules.system.domain.SysDict;
 import com.ratel.modules.system.domain.SysDictDetail;
+import com.ratel.modules.system.domain.SysRole;
 import com.ratel.modules.system.repository.SysDictRepository;
 import com.ratel.modules.system.service.dto.SysDictQueryCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +57,9 @@ public class SysDictService extends BaseService<SysDict, String> {
     @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public SysDict create(SysDict resources) {
+        if (sysDictRepository.findByName(resources.getName()) != null) {
+            throw new EntityExistException(SysRole.class, "字典名称", resources.getName());
+        }
         return sysDictRepository.save(resources);
     }
 

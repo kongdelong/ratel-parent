@@ -1,5 +1,6 @@
 package com.ratel.modules.system.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.ratel.framework.domain.BaseUuidEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,6 +39,14 @@ public class SysDictDetail extends BaseUuidEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dict_id")
+    @JsonBackReference
     private SysDict sysDict;
+
+    @Transient
+    private String sysDictName;
+
+    public String getSysDictName() {
+        return this.sysDict.getName();
+    }
 
 }

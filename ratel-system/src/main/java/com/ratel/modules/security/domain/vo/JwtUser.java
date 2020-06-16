@@ -2,13 +2,14 @@ package com.ratel.modules.security.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ratel.framework.modules.system.domain.RatelUser;
+import com.ratel.modules.system.domain.SysRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
@@ -32,11 +33,10 @@ public class JwtUser implements RatelUser {
 
     private String phone;
 
-    private String dept;
+    private String deptName;
 
     private String deptId;
 
-    @JsonIgnore
     private Collection<GrantedAuthority> authorities;
 
     private Boolean enabled;

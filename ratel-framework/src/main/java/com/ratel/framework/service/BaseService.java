@@ -218,4 +218,9 @@ public abstract class BaseService<T extends AbstractPersistableEntity, ID extend
     public void detach(Object entity) {
         entityManager.detach(entity);
     }
+
+
+    public void updateDomain(String id, String prop, String value) {
+
+    }
 }

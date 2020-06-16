@@ -73,7 +73,7 @@ public class SysRoleService extends BaseService<SysRole, String> {
             throw new EntityExistException(SysRole.class, "username", resources.getName());
         }
         if (sysRoleRepository.findByPermission(resources.getPermission()) != null) {
-            throw new EntityExistException(SysRole.class, "permission", resources.getPermission());
+            throw new EntityExistException(SysRole.class, "权限标识", resources.getPermission());
         }
         return sysRoleRepository.save(resources);
     }
@@ -162,6 +162,26 @@ public class SysRoleService extends BaseService<SysRole, String> {
                 .collect(Collectors.toList());
     }
 
+
+    @Cacheable(key = "'loadPermissionByUser:' + #p0.username")
+    public Collection<String> getUserReleNames(SysUser user) {
+        Set<SysRole> roles = sysRoleRepository.findBySysUsers_Id(user.getId());
+        List<String> list = new ArrayList<>();
+        roles.forEach(item -> {
+            list.add(item.getName());
+        });
+        return list;
+    }
+
+    @Cacheable(key = "'loadPermissionByUser:' + #p0.username")
+    public Collection<String> getUserRelePermissions(SysUser user) {
+        Set<SysRole> roles = sysRoleRepository.findBySysUsers_Id(user.getId());
+        List<String> list = new ArrayList<>();
+        roles.forEach(item -> {
+            list.add(item.getPermission());
+        });
+        return list;
+    }
 
     public void download(List<SysRole> roles, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();

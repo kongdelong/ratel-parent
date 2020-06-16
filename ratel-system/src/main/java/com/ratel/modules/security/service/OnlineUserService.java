@@ -38,7 +38,7 @@ public class OnlineUserService {
      * @param request /
      */
     public OnlineUser save(JwtUser jwtUser, String token, HttpServletRequest request) {
-        String job = jwtUser.getDept();
+        String job = jwtUser.getDeptName();
         String ip = StringUtils.getIp(request);
         String browser = StringUtils.getBrowser(request);
         String address = StringUtils.getCityInfo(ip);
@@ -121,7 +121,7 @@ public class OnlineUserService {
         for (OnlineUser user : all) {
             Map<String, Object> map = new LinkedHashMap<>();
             map.put("用户名", user.getUserName());
-            map.put("岗位", user.getJob());
+            map.put("部门", user.getDeptName());
             map.put("登录IP", user.getIp());
             map.put("登录地点", user.getAddress());
             map.put("浏览器", user.getBrowser());

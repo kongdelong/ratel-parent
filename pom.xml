@@ -7,7 +7,7 @@
     <groupId>com.ratel</groupId>
     <artifactId>ratel-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.5.RELEASE</version>
+    <version>0.0.11.RELEASE</version>
     <name>ratel-root</name>
 
     <modules>
@@ -41,8 +41,7 @@
         <hutool.version>5.0.6</hutool.version>
         <jjwt.version>0.10.6</jjwt.version>
         <mybatis-spring-boot-starter.version>2.1.1</mybatis-spring-boot-starter.version>
-
-        <ratel.parent.version>0.0.5.RELEASE</ratel.parent.version>
+        <ratel.parent.version>0.0.11.RELEASE</ratel.parent.version>
 
     </properties>
 

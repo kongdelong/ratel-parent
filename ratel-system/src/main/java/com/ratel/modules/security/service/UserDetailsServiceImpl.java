@@ -48,6 +48,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 user.getSysDept() != null ? user.getSysDept().getName() : "",
                 user.getSysDept() != null ? user.getSysDept().getId() : "",
                 sysRoleService.mapToGrantedAuthorities(user),
+//                sysRoleService.getUserReleNames(user),
+//                sysRoleService.getUserRelePermissions(user),
                 user.getEnabled(),
                 user.getCreateTime(),
                 "system",

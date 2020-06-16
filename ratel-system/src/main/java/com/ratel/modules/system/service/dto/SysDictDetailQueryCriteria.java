@@ -9,6 +9,6 @@ public class SysDictDetailQueryCriteria {
     @Query(type = Query.Type.INNER_LIKE)
     private String label;
 
-    @Query(propName = "name",joinName = "dict")
+    @Query(propName = "name",joinName = "sysDict")
     private String dictName;
 }

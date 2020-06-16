@@ -2,6 +2,7 @@ package com.ratel.modules.demo.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ratel.framework.annotation.search.Query;
+import com.ratel.framework.service.dto.RatelQueryCriteria;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -10,7 +11,7 @@ import java.util.Set;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DemoQueryCriteria {
+public class DemoQueryCriteria extends RatelQueryCriteria {
 
     /**
      * 多字段模糊搜索，仅支持String类型字段，多个用逗号隔开, 如@Query(blurry = "email,username")

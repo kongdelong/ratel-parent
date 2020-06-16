@@ -9,8 +9,8 @@ spring:
     check-template-location: false
   profiles:
     active: dev
-      #jackson:
-      #time-zone: GMT+8
+  jackson:
+    time-zone: GMT+8
       #serialization:
       #格式化输出
       #indent_output: true
@@ -20,7 +20,7 @@ spring:
       #parser:
       #允许出现特殊字符和转义符
       #allow_unquoted_control_chars: true
-      #允许出现单引号
+    #允许出现单引号
     #allow_single_quotes: true
     #设置空如何序列化
     #defaultPropertyInclusion: NON_EMPTY
@@ -30,10 +30,10 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-#        session_factory:
-#          interceptor: com.ratel.framework.domain.interceptor.HibernateInterceptor
+        session_factory:
+          statement_inspector: com.ratel.modules.SqlStatementInspector
+          interceptor: com.ratel.framework.domain.interceptor.HibernateInterceptor
     open-in-view: true
-
 
 mybatis:
   # 重要配置
@@ -43,9 +43,14 @@ mybatis:
 
 ratel:
   framework:
-    security: false
+    security: true
     permission: false
+
+    userId: 222222
     username: admin
+    deptId: dddd
+    deptName: dddd
+    roles: jddd,dddd,dddd
 
   task:
     pool:
@@ -72,8 +77,8 @@ ratel:
   ehcache:
     configFile: ehcache/ehcache-local.xml
     defaultCacheName: sysCache
-#  ehcache:
-#    configFile: cache/ehcache-rmi.xml
+  #  ehcache:
+  #    configFile: cache/ehcache-rmi.xml
 
   #密码加密传输，前端公钥加密，后端私钥解密
   rsa:

@@ -27,12 +27,14 @@ public class RatelUserImpl implements RatelUser {
 
     private String phone;
 
-    private String dept;
+    private String deptName;
 
     private String deptId;
 
     @JsonIgnore
     private Collection<GrantedAuthority> authorities;
+
+    private Collection roles;
 
     private Boolean enabled;
 

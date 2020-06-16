@@ -16,7 +16,7 @@ public class OnlineUser implements Serializable {
 
     private String nickName;
 
-    private String job;
+    private String deptName;
 
     private String browser;
 

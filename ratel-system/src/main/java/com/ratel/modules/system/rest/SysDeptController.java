@@ -9,11 +9,9 @@ import com.ratel.modules.system.config.DataScope;
 import com.ratel.modules.system.domain.SysDept;
 import com.ratel.modules.system.service.SysDeptService;
 import com.ratel.modules.system.service.dto.SysDeptQueryCriteria;
-import com.ratel.modules.system.service.dto.SysMenuQueryCriteria;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -56,6 +54,7 @@ public class SysDeptController {
         List<SysDept> deptDtos = sysDeptService.queryAll(criteria);
         return FormsHttpEntity.ok(sysDeptService.buildTree(deptDtos));
     }
+
     @RatelLog("返回全部的部门")
     @ApiOperation("返回全部的部门")
     @GetMapping(value = "/list")
@@ -63,6 +62,30 @@ public class SysDeptController {
     public ResponseEntity<Object> getDeptList(SysDeptQueryCriteria criteria) {
         return FormsHttpEntity.ok(sysDeptService.queryAll(criteria));
     }
+
+
+    @RatelLog("返回全部的部门")
+    @ApiOperation("部门数据，提供数据权限，启用标志")
+    @GetMapping(value = "/listTree")
+    @PreAuthorize("@ratel.check('user:list','dept:list')")
+    public ResponseEntity<Object> getDeptListTree(SysDeptQueryCriteria criteria) {
+        // 数据权限
+        criteria.setIds(dataScope.getDeptIds());
+        criteria.setEnabled(true);
+        return FormsHttpEntity.ok(sysDeptService.queryAll(criteria));
+    }
+
+
+    @RatelLog("返回全部的部门")
+    @ApiOperation("部门数据，启用标志")
+    @GetMapping(value = "/listTreeNoScope")
+    @PreAuthorize("@ratel.check('user:list','dept:list')")
+    public ResponseEntity<Object> getDeptListTreeNoScope(SysDeptQueryCriteria criteria) {
+        // 数据权限
+        criteria.setEnabled(true);
+        return FormsHttpEntity.ok(sysDeptService.queryAll(criteria));
+    }
+
 
     @RatelLog("新增部门")
     @ApiOperation("新增部门")

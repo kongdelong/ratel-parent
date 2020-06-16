@@ -82,4 +82,8 @@
     <logger name="jdbc.audit" level="OFF" additivity="false">
         <appender-ref ref="console"/>
     </logger>
+
+    <logger name="org.springframework.data.jpa" level="debug" additivity="false">
+        <appender-ref ref="console"/>
+    </logger>
 </configuration>

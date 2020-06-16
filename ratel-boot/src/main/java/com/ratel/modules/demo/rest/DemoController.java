@@ -16,6 +16,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+
 @Api(tags = "实例")
 @RestController
 @RequestMapping("/api/demo")
@@ -119,6 +121,38 @@ public class DemoController {
     //@PreAuthorize("@el.check('demo:del')")
     public ResponseEntity<Object> updateNickName(@RequestBody DemoDomain resources) {
         demoService.updateNickName(resources);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    @RatelLog("更新一个例子(updateById)")
+    @ApiOperation(value = "更新一个例子")
+    @PostMapping(value = "/updateById")
+    //@PreAuthorize("@el.check('demo:del')")
+    public ResponseEntity<Object> updateById(@RequestBody DemoDomain resources) {
+        demoService.updateNickName(resources.getId(), resources.getNickName());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    @RatelLog("更新一个例子(updateById)")
+    @ApiOperation(value = "更新一个例子")
+    @PostMapping(value = "/updateNickNameAndLastName")
+    //@PreAuthorize("@el.check('demo:del')")
+    public ResponseEntity<Object> updateNickNameAndLastName(@RequestBody DemoDomain resources) {
+        demoService.updateNickNameAndLastName(resources.getId(), Arrays.asList("nickName", "lastName"), resources.getNickName(), resources.getLastName());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    @RatelLog("更新一个例子(updateById)")
+    @ApiOperation(value = "更新一个例子")
+    @PostMapping(value = "/updateByWhere")
+    //@PreAuthorize("@el.check('demo:del')")
+    public ResponseEntity<Object> updateByWhere(@RequestBody DemoDomain resources) {
+        DemoQueryCriteria criteria = new DemoQueryCriteria();
+        criteria.setUsername("username");
+        demoService.update(criteria, Arrays.asList("nickName", "lastName"), resources.getNickName(), resources.getLastName());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

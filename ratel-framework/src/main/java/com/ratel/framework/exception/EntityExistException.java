@@ -1,15 +1,12 @@
 package com.ratel.framework.exception;
 
-import org.springframework.util.StringUtils;
-
 public class EntityExistException extends RuntimeException {
 
     public EntityExistException(Class clazz, String field, String val) {
-        super(EntityExistException.generateMessage(clazz.getSimpleName(), field, val));
+        super(EntityExistException.generateMessage(field, val));
     }
 
-    private static String generateMessage(String entity, String field, String val) {
-        return StringUtils.capitalize(entity)
-                + " with " + field + " " + val + " existed";
+    private static String generateMessage(String field, String val) {
+        return field + ": " + val + " 已经存在";
     }
 }

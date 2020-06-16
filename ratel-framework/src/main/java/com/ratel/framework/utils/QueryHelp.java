@@ -16,6 +16,7 @@ import java.util.List;
 @SuppressWarnings({"unchecked","all"})
 public class QueryHelp {
 
+
     public static <R, Q> Predicate getPredicate(Root<R> root, Q query, CriteriaBuilder cb) {
         List<Predicate> list = new ArrayList<>();
 

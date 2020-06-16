@@ -14,7 +14,15 @@ public class RatelProperties {
 
     private Boolean security;
 
+    private String userId;
+
     private String username;
+
+    private String deptId;
+
+    private String deptName;
+
+    private String roles;
 
     private String permission;
 

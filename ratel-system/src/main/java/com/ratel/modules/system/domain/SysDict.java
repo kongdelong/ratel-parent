@@ -1,5 +1,6 @@
 package com.ratel.modules.system.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ratel.framework.domain.BaseUuidEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +28,7 @@ public class SysDict extends BaseUuidEntity {
     private String remark;
 
     @OneToMany(mappedBy = "sysDict", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JsonManagedReference
     private List<SysDictDetail> sysDictDetails;
 
 }
