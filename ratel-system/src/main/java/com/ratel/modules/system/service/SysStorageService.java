@@ -3,10 +3,14 @@ package com.ratel.modules.system.service;
 import cn.hutool.core.util.ObjectUtil;
 import com.ratel.framework.exception.BadRequestException;
 import com.ratel.framework.service.BaseService;
-import com.ratel.framework.utils.*;
+import com.ratel.framework.utils.FileUtil;
+import com.ratel.framework.utils.QueryHelp;
+import com.ratel.framework.utils.StringUtils;
+import com.ratel.framework.utils.ValidationUtil;
 import com.ratel.modules.system.domain.SysStorage;
 import com.ratel.modules.system.repository.SysStorageRepository;
 import com.ratel.modules.system.service.dto.SysStorageQueryCriteria;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheConfig;
@@ -27,6 +31,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 @CacheConfig(cacheNames = "sysStorage")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
@@ -78,8 +83,8 @@ public class SysStorageService extends BaseService<SysStorage, String> {
                     file.getPath(),
                     type,
                     FileUtil.getSize(multipartFile.getSize()),
-                    SecurityUtils.getUsername(),
-                    "file/" + file.getPath().replace(path, "").replace(File.separator, "/")
+                    "file/" + file.getPath().replace(path, "").replace(File.separator, "/"),
+                    ""
             );
             return sysStorageRepository.save(localStorage);
         } catch (Exception e) {
@@ -87,6 +92,41 @@ public class SysStorageService extends BaseService<SysStorage, String> {
             throw e;
         }
     }
+
+
+    @CacheEvict(allEntries = true)
+    @Transactional(rollbackFor = Exception.class)
+    public SysStorage createImage(String name, MultipartFile multipartFile) {
+        FileUtil.checkSize(maxSize, multipartFile.getSize());
+        String suffix = FileUtil.getExtensionName(multipartFile.getOriginalFilename());
+        String type = FileUtil.getFileType(suffix);
+        File file = FileUtil.upload(multipartFile, path + type + File.separator);
+        if (ObjectUtil.isNull(file)) {
+            throw new BadRequestException("上传失败");
+        }
+        String fileSmall = FileUtil.resize(file, multipartFile.getSize());
+        if (ObjectUtil.isNull(fileSmall)) {
+            log.warn("生成缩略图失败" + file.getPath());
+        }
+        try {
+            name = StringUtils.isBlank(name) ? FileUtil.getFileNameNoEx(multipartFile.getOriginalFilename()) : name;
+            SysStorage localStorage = new SysStorage(
+                    file.getName(),
+                    name,
+                    suffix,
+                    file.getPath(),
+                    type,
+                    FileUtil.getSize(multipartFile.getSize()),
+                    "file/" + file.getPath().replace(path, "").replace(File.separator, "/"),
+                    "file/" + fileSmall.replace(path, "").replace(File.separator, "/")
+            );
+            return sysStorageRepository.save(localStorage);
+        } catch (Exception e) {
+            FileUtil.del(file);
+            throw e;
+        }
+    }
+
 
     @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
@@ -115,7 +155,7 @@ public class SysStorageService extends BaseService<SysStorage, String> {
             map.put("备注名", localStorageDTO.getName());
             map.put("文件类型", localStorageDTO.getType());
             map.put("文件大小", localStorageDTO.getSize());
-            map.put("操作人", localStorageDTO.getOperate());
+            map.put("操作人", localStorageDTO.getCreateUserName());
             map.put("创建日期", localStorageDTO.getCreateTime());
             list.add(map);
         }

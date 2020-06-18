@@ -48,6 +48,14 @@ public class SysStorageController {
         return ResponseEntity.ok(sysStorageService.create(name, file));
     }
 
+
+    @ApiOperation("上传图片/缩略图")
+    @PostMapping(value = "/image")
+    @PreAuthorize("@ratel.check('storage:add')")
+    public ResponseEntity<Object> createImage(@RequestParam String name, @RequestParam("file") MultipartFile file) {
+        return ResponseEntity.ok(sysStorageService.createImage(name, file));
+    }
+
     @ApiOperation("修改文件")
     @PutMapping
     @PreAuthorize("@ratel.check('storage:edit')")

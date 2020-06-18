@@ -158,6 +158,44 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
         return null;
     }
 
+    /**
+     * 将文件名解析成文件的上传路径
+     */
+    public static String resize(File file, long size) {
+        float imageSize = 1f;
+        if (size / MB >= 100) {
+            imageSize = 0.2f;
+        } else if (size / MB >= 10) {
+            imageSize = 0.2f;
+        } else if (size / MB >= 5) {
+            imageSize = 0.3f;
+        } else if (size / MB >= 2) {
+            imageSize = 0.4f;
+        } else if (size / MB >= 1) {
+            imageSize = 0.5f;
+        } else if (size / KB >= 500) {
+            imageSize = 0.6f;
+        }
+
+        String fileName = file.getName();
+        String suffix = FileUtil.getExtensionName(fileName);
+        String fileNameNoEx = FileUtil.getFileNameNoEx(fileName);
+        String newFileName = fileNameNoEx + "." + "thumb" + "." + suffix;
+        try {
+            File dest = new File(file.getParent() + File.separator + newFileName).getCanonicalFile();
+            // 检测是否存在目录
+            if (!dest.getParentFile().exists()) {
+                dest.getParentFile().mkdirs();
+            }
+            ImageUtils.optimize(file, dest, imageSize);
+            return dest.getPath();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
     public static String fileToBase64(File file) throws Exception {
         FileInputStream inputFile = new FileInputStream(file);
         String base64;
@@ -217,15 +255,15 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
         String video = "avi mpg mpe mpeg asf wmv mov qt rm mp4 flv m4v webm ogv ogg";
         String image = "bmp dib pcp dif wmf gif jpg tif eps psd cdr iff tga pcd mpt png jpeg";
         if (image.contains(type.toLowerCase())) {
-            return "图片";
+            return "images";
         } else if (documents.contains(type.toLowerCase())) {
-            return "文档";
+            return "documents";
         } else if (music.contains(type.toLowerCase())) {
-            return "音乐";
+            return "musics";
         } else if (video.contains(type.toLowerCase())) {
-            return "视频";
+            return "videos";
         } else {
-            return "其他";
+            return "others";
         }
     }
 
@@ -331,6 +369,12 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
 
     public static String getMd5(File file) {
         return getMd5(getByte(file));
+    }
+
+
+    public static void main(String[] arg) {
+        File file = new File("/Users/dongchuang/Desktop/background.9fbb9927.png");
+        resize(file, 100000000L);
     }
 
 }

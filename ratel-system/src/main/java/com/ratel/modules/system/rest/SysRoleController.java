@@ -69,7 +69,7 @@ public class SysRoleController {
     @ApiOperation("查询角色")
     @GetMapping
     @PreAuthorize("@ratel.check('roles:list')")
-    public ResponseEntity<Object> getRoles(SysRoleQueryCriteria criteria, Pageable pageable) {
+    public ResponseEntity<Object> getRoles(SysRoleQueryCriteria criteria, @PageableDefault(sort = {"level"}, direction = Sort.Direction.ASC) Pageable pageable) {
         return FormsHttpEntity.ok(sysRoleService.queryAll(criteria, pageable));
     }
 

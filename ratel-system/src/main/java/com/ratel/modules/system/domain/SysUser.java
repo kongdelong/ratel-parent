@@ -41,7 +41,6 @@ public class SysUser extends BaseUuidEntity {
     @JoinColumn(name = "avatar_id")
     private SysUserAvatar sysUserAvatar;
 
-    @NotBlank
     @Email
     private String email;
 
@@ -64,7 +63,7 @@ public class SysUser extends BaseUuidEntity {
     @JoinColumn(name = "sys_dept_id")
     private SysDept sysDept;
 
-    @Column(unique = false)
+    @Column(name = "sort")
     private Long sort = 999L;
 
 

@@ -110,7 +110,6 @@ public class TokenProviderService implements InitializingBean {
         } catch (ExpiredJwtException e) {
             log.info("Expired JWT token.");
             e.printStackTrace();
-            throw e;
         } catch (UnsupportedJwtException e) {
             log.info("Unsupported JWT token.");
             e.printStackTrace();
@@ -144,4 +143,6 @@ public class TokenProviderService implements InitializingBean {
             ratelCacheProvider.expire(properties.getOnlineKey() + token, renew, TimeUnit.MILLISECONDS);
         }
     }
+
+
 }
