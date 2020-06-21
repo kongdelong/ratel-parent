@@ -8,6 +8,8 @@ public interface DefaultAuditable {
 
     void setCreateUserId(String accountId);
 
+    String getCreateUserId();
+
     void setDataDomain(String dataDomain);
 
     String getDataDomain();
@@ -19,6 +21,8 @@ public interface DefaultAuditable {
     void setUpdateUserName(String userName);
 
     void setUpdateUserId(String accountId);
+
+    String getUpdateUserId();
 
     void setUpdateTime(Date updateDate);
 

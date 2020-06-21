@@ -2,8 +2,10 @@ package com.ratel.framework.domain.auditable;
 
 import com.ratel.framework.GlobalConstant;
 import com.ratel.framework.modules.system.domain.RatelUser;
+import com.ratel.framework.utils.SecurityUtils;
+import com.ratel.framework.utils.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -14,11 +16,11 @@ import java.util.Date;
  *
  * @see AuditingEntityListener
  */
+@Slf4j
 public class SaveUpdateAuditListener {
 
     @PrePersist
     public void touchForCreate(Object target) {
-
         if (!(target instanceof DefaultAuditable)) {
             return;
         }
@@ -30,14 +32,16 @@ public class SaveUpdateAuditListener {
         }
 
         try {
-            RatelUser user = (RatelUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            auditable.setCreateUserId(user.getId());
-            auditable.setCreateUserName(user.getNickName());
-            auditable.setDeptId(user.getDeptId());
-            auditable.setUpdateUserId(user.getId());
-            auditable.setUpdateUserName(user.getNickName());
+            RatelUser user = (RatelUser) SecurityUtils.getUserDetails();
+            if (StringUtils.isBlank(auditable.getCreateUserId())) {
+                auditable.setCreateUserId(user.getId());
+                auditable.setCreateUserName(user.getNickName());
+                auditable.setDeptId(user.getDeptId());
+                auditable.setUpdateUserId(user.getId());
+                auditable.setUpdateUserName(user.getNickName());
+            }
         } catch (Exception e) {
-
+            log.warn("insert - 审计记录记录创建和修改信息修改失败");
         }
         auditable.setDataDomain(GlobalConstant.DEFAULT_VALUE);
     }
@@ -50,11 +54,13 @@ public class SaveUpdateAuditListener {
         DefaultAuditable auditable = (DefaultAuditable) target;
         auditable.setUpdateTime(new Date());
         try {
-            RatelUser user = (RatelUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            auditable.setUpdateUserId(user.getId());
-            auditable.setUpdateUserName(user.getNickName());
+            RatelUser user = (RatelUser) SecurityUtils.getUserDetails();
+            if (StringUtils.isBlank(auditable.getUpdateUserId())) {
+                auditable.setUpdateUserId(user.getId());
+                auditable.setUpdateUserName(user.getNickName());
+            }
         } catch (Exception e) {
-
+            log.warn("upate - 审计记录记录创建和修改信息修改失败");
         }
     }
 }
