@@ -36,7 +36,6 @@ public class DemoService extends BaseService<DemoDomain, Long> {
         return demoRepository.getOne(demoDomain.getId());
     }
 
-
     @Transactional(rollbackFor = Exception.class)
     public void updateStatus(Long[] ids) {
         for (int i = 0; i < ids.length; i++) {

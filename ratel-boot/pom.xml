@@ -5,7 +5,7 @@
     <parent>
         <artifactId>ratel-parent</artifactId>
         <groupId>com.ratel</groupId>
-        <version>0.0.13.RELEASE</version>
+        <version>0.0.21.RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -13,8 +13,17 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.ratel</groupId>
             <artifactId>ratel-system</artifactId>
+            <version>${ratel.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ratel</groupId>
+            <artifactId>ratel-generator</artifactId>
             <version>${ratel.parent.version}</version>
         </dependency>
         <dependency>
@@ -23,4 +32,14 @@
             <version>${ratel.parent.version}</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

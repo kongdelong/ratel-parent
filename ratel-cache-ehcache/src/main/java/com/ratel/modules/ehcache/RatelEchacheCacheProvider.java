@@ -70,20 +70,20 @@ public class RatelEchacheCacheProvider implements RatelCacheProvider {
     }
 
     public synchronized void setSynchronized(String key, Object value, int expiration) {
-        log.debug(String.format("EhCachedProvider.set: key = %s value = %s expr = %d", key, value.toString(), expiration));
+//        log.debug(String.format("EhCachedProvider.set: key = %s value = %s expr = %d", key, value.toString(), expiration));
         try {
             cache.remove(key);
             Element element = new Element(key, value);
-            element.setTimeToLive(0);
-            element.setTimeToIdle(expiration);
+            element.setTimeToLive(expiration);
             cache.put(element);
         } catch (Exception e) {
             log.error("EhCachedProvider.set", e);
         }
     }
 
+
     public void remove(String key) {
-        log.debug("EhCachedProvider.remove:" + key);
+//        log.debug("EhCachedProvider.remove:" + key);
         try {
             cache.remove(key);
         } catch (Exception e) {
@@ -92,7 +92,7 @@ public class RatelEchacheCacheProvider implements RatelCacheProvider {
     }
 
     public synchronized void replace(String key, Object value, int expiration) {
-        log.debug(String.format("EhCachedProvider.replace: key = %s value = %s expr = %d", key, value.toString(), expiration));
+//        log.debug(String.format("EhCachedProvider.replace: key = %s value = %s expr = %d", key, value.toString(), expiration));
         try {
             Element element = new Element(key, value);
             element.setTimeToLive(0);
@@ -104,7 +104,7 @@ public class RatelEchacheCacheProvider implements RatelCacheProvider {
     }
 
     public void flush() {
-        log.debug("EhCachedProvider.flushAll");
+//        log.debug("EhCachedProvider.flushAll");
         try {
             cache.removeAll();
         } catch (Exception e) {

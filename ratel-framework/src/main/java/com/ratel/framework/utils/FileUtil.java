@@ -6,6 +6,7 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.poi.excel.BigExcelWriter;
 import cn.hutool.poi.excel.ExcelUtil;
 import com.ratel.framework.exception.BadRequestException;
+import net.coobird.thumbnailator.Thumbnails;
 import org.apache.poi.util.IOUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -187,7 +188,14 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
             if (!dest.getParentFile().exists()) {
                 dest.getParentFile().mkdirs();
             }
-            ImageUtils.optimize(file, dest, imageSize);
+
+            Thumbnails.of(file).
+                    //scalingMode(ScalingMode.BICUBIC).
+                            scale(0.8). // 图片缩放80%, 不能和size()一起使用
+                    outputQuality(imageSize). // 图片质量压缩80%
+                    toFile(dest);
+
+            //ImageUtils.optimize(file, dest, imageSize);
             return dest.getPath();
         } catch (Exception e) {
             e.printStackTrace();

@@ -38,7 +38,7 @@ public class DemoController {
     @RatelLog("实例查询-分页")
     @ApiOperation(value = "实例查询-分页")
     @GetMapping
-    //@PreAuthorize("@el.check('demo:list')") //权限
+    //@PreAuthorize("@ratel.check('demo:list')") //权限
     public ResponseEntity<Object> getDemoDomains(DemoQueryCriteria criteria, Pageable pageable) {
         return new ResponseEntity<>(demoService.queryAll(criteria, pageable), HttpStatus.OK);
     }
@@ -54,7 +54,7 @@ public class DemoController {
     @RatelLog("实例查询-分页")
     @ApiOperation(value = "实例查询-分页")
     @PostMapping(value = "/postParamDemos")
-    //@PreAuthorize("@el.check('demo:list')") //权限
+    //@PreAuthorize("@ratel.check('demo:list')") //权限
     public ResponseEntity<Object> postParamDemos(@RequestBody DemoQueryCriteria criteria, Pageable pageable) {
         return new ResponseEntity<>(demoService.queryAll(criteria, pageable), HttpStatus.OK);
     }
@@ -62,7 +62,7 @@ public class DemoController {
     @RatelLog("实例查询-查询信息")
     @ApiOperation(value = "实例查询-查询信息")
     @PostMapping(value = "/postDemoDomain")
-    //@PreAuthorize("@el.check('demo:list')") //权限
+    //@PreAuthorize("@ratel.check('demo:list')") //权限
     public ResponseEntity<DemoDomain> postDemoDomain(@RequestBody DemoDomain demoDomain) {
         return new ResponseEntity<>(demoService.getDemoDomain(demoDomain), HttpStatus.OK);
     }
@@ -70,7 +70,7 @@ public class DemoController {
     @RatelLog("实例查询")
     @ApiOperation("实例查询-查询信息")
     @GetMapping(value = "/getDemoDomainById/{id}")
-    //@PreAuthorize("@el.check('demo:list')") //权限
+    //@PreAuthorize("@ratel.check('demo:list')") //权限
     public ResponseEntity<Object> getDemoDomainById(@PathVariable Long id) {
         return new ResponseEntity<>(demoService.findOne(id), HttpStatus.OK);
     }
@@ -78,7 +78,7 @@ public class DemoController {
     @RatelLog("新增实例")
     @ApiOperation("新增实例")
     @PostMapping(value = "/addDemoDomain")
-    //@PreAuthorize("@el.check('demo:add')")  //权限
+    //@PreAuthorize("@ratel.check('demo:add')")  //权限
     public ResponseEntity<Object> create(@Validated({Group.class}) @RequestBody DemoDomain resources) {
         if (resources.getId() != null) {
             throw new BadRequestException("A new " + ENTITY_NAME + " cannot already have an ID");
@@ -90,7 +90,7 @@ public class DemoController {
     @RatelLog("修改实例")
     @ApiOperation(value = "修改实例")
     @PutMapping
-    @PreAuthorize("@el.check('demo:edit')")
+    @PreAuthorize("@ratel.check('demo:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody DemoDomain resources) {
         demoService.save(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -99,7 +99,7 @@ public class DemoController {
     @RatelLog("删除实例-物理删除")
     @ApiOperation(value = "删除实例-物理删除")
     @DeleteMapping
-    @PreAuthorize("@el.check('demo:del')")
+    @PreAuthorize("@ratel.check('demo:del')")
     public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
         demoService.deleteBatch(ids);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -108,7 +108,7 @@ public class DemoController {
     @RatelLog("删除实例-逻辑删除")
     @ApiOperation(value = "删除实例-逻辑删除")
     @PostMapping(value = "/updateStatus")
-    //@PreAuthorize("@el.check('demo:del')")
+    //@PreAuthorize("@ratel.check('demo:del')")
     public ResponseEntity<Object> updateStatus(@RequestBody Long[] ids) {
         demoService.updateStatus(ids);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -118,7 +118,7 @@ public class DemoController {
     @RatelLog("更新一个例子")
     @ApiOperation(value = "更新一个例子")
     @PostMapping(value = "/updateNickName")
-    //@PreAuthorize("@el.check('demo:del')")
+    //@PreAuthorize("@ratel.check('demo:del')")
     public ResponseEntity<Object> updateNickName(@RequestBody DemoDomain resources) {
         demoService.updateNickName(resources);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -128,7 +128,7 @@ public class DemoController {
     @RatelLog("更新一个例子(updateById)")
     @ApiOperation(value = "更新一个例子")
     @PostMapping(value = "/updateById")
-    //@PreAuthorize("@el.check('demo:del')")
+    //@PreAuthorize("@ratel.check('demo:del')")
     public ResponseEntity<Object> updateById(@RequestBody DemoDomain resources) {
         demoService.updateNickName(resources.getId(), resources.getNickName());
         return new ResponseEntity<>(HttpStatus.OK);
@@ -138,7 +138,7 @@ public class DemoController {
     @RatelLog("更新一个例子(updateById)")
     @ApiOperation(value = "更新一个例子")
     @PostMapping(value = "/updateNickNameAndLastName")
-    //@PreAuthorize("@el.check('demo:del')")
+    //@PreAuthorize("@ratel.check('demo:del')")
     public ResponseEntity<Object> updateNickNameAndLastName(@RequestBody DemoDomain resources) {
         demoService.updateNickNameAndLastName(resources.getId(), Arrays.asList("nickName", "lastName"), resources.getNickName(), resources.getLastName());
         return new ResponseEntity<>(HttpStatus.OK);
@@ -148,7 +148,7 @@ public class DemoController {
     @RatelLog("更新一个例子(updateById)")
     @ApiOperation(value = "更新一个例子")
     @PostMapping(value = "/updateByWhere")
-    //@PreAuthorize("@el.check('demo:del')")
+    //@PreAuthorize("@ratel.check('demo:del')")
     public ResponseEntity<Object> updateByWhere(@RequestBody DemoDomain resources) {
         DemoQueryCriteria criteria = new DemoQueryCriteria();
         criteria.setUsername("username");

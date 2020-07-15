@@ -26,7 +26,7 @@ public class DemoQueryCriteria extends RatelQueryCriteria {
     private String id;
 
     @Query(type = Query.Type.EQUAL, propName = "id")
-    private Long userId;
+    private String userId;
 
     /**
      * 模糊

@@ -4,6 +4,8 @@ import com.ratel.framework.domain.BaseNativeEntity;
 import com.ratel.framework.domain.validation.SaveGroup;
 import com.ratel.framework.domain.validation.UpdateGroup;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

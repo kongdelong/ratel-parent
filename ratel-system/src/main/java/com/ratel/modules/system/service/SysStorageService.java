@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -48,8 +47,7 @@ public class SysStorageService extends BaseService<SysStorage, String> {
 
     @Cacheable
     public Object queryAll(SysStorageQueryCriteria criteria, Pageable pageable) {
-        Page<SysStorage> page = sysStorageRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder), pageable);
-        return page;
+        return sysStorageRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder), pageable);
     }
 
     @Cacheable
@@ -81,6 +79,7 @@ public class SysStorageService extends BaseService<SysStorage, String> {
                     name,
                     suffix,
                     file.getPath(),
+                    "",
                     type,
                     FileUtil.getSize(multipartFile.getSize()),
                     "file/" + file.getPath().replace(path, "").replace(File.separator, "/"),
@@ -115,6 +114,7 @@ public class SysStorageService extends BaseService<SysStorage, String> {
                     name,
                     suffix,
                     file.getPath(),
+                    fileSmall,
                     type,
                     FileUtil.getSize(multipartFile.getSize()),
                     "file/" + file.getPath().replace(path, "").replace(File.separator, "/"),
@@ -143,6 +143,7 @@ public class SysStorageService extends BaseService<SysStorage, String> {
         for (String id : ids) {
             SysStorage storage = sysStorageRepository.findById(id).orElseGet(SysStorage::new);
             FileUtil.del(storage.getPath());
+            FileUtil.del(storage.getSmallPath());
             sysStorageRepository.delete(storage);
         }
     }

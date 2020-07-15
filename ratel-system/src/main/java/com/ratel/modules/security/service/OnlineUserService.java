@@ -38,13 +38,13 @@ public class OnlineUserService {
      * @param request /
      */
     public OnlineUser save(JwtUser jwtUser, String token, HttpServletRequest request) {
-        String job = jwtUser.getDeptName();
+        String deptName = jwtUser.getDeptName();
         String ip = StringUtils.getIp(request);
         String browser = StringUtils.getBrowser(request);
         String address = StringUtils.getCityInfo(ip);
         OnlineUser onlineUser = null;
         try {
-            onlineUser = new OnlineUser(jwtUser.getUsername(), jwtUser.getNickName(), job, browser, ip, address, EncryptUtils.desEncrypt(token), new Date(), jwtUser);
+            onlineUser = new OnlineUser(jwtUser.getUsername(), jwtUser.getNickName(), deptName, browser, ip, address, EncryptUtils.desEncrypt(token), new Date(), jwtUser);
         } catch (Exception e) {
             e.printStackTrace();
         }

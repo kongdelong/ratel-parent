@@ -76,9 +76,9 @@ public class SysUserService extends BaseService<SysUser, String> {
         if (sysUserRepository.findByUsername(resources.getUsername()) != null) {
             throw new EntityExistException(SysUser.class, "username", resources.getUsername());
         }
-        if (sysUserRepository.findByEmail(resources.getEmail()) != null) {
-            throw new EntityExistException(SysUser.class, "email", resources.getEmail());
-        }
+//        if (sysUserRepository.findByEmail(resources.getEmail()) != null) {
+//            throw new EntityExistException(SysUser.class, "email", resources.getEmail());
+//        }
         return sysUserRepository.save(resources);
     }
 
@@ -88,15 +88,15 @@ public class SysUserService extends BaseService<SysUser, String> {
         SysUser user = sysUserRepository.findById(resources.getId()).orElseGet(SysUser::new);
         ValidationUtil.isNull(user.getId(), "User", "id", resources.getId());
         SysUser user1 = sysUserRepository.findByUsername(user.getUsername());
-        SysUser user2 = sysUserRepository.findByEmail(user.getEmail());
+//        SysUser user2 = sysUserRepository.findByEmail(user.getEmail());
 
         if (user1 != null && !user.getId().equals(user1.getId())) {
             throw new EntityExistException(SysUser.class, "username", resources.getUsername());
         }
 
-        if (user2 != null && !user.getId().equals(user2.getId())) {
-            throw new EntityExistException(SysUser.class, "email", resources.getEmail());
-        }
+//        if (user2 != null && !user.getId().equals(user2.getId())) {
+//            throw new EntityExistException(SysUser.class, "email", resources.getEmail());
+//        }
 
         // 如果用户的角色改变了，需要手动清理下缓存
         if (!resources.getSysRoles().equals(user.getSysRoles())) {
@@ -151,6 +151,12 @@ public class SysUserService extends BaseService<SysUser, String> {
         } else {
             return user;
         }
+    }
+
+    @Cacheable(key = "'loadUserByUsername:'+#p0")
+    public SysUser findByUsername(String userName) {
+        SysUser user = sysUserRepository.findByUsername(userName);
+        return user;
     }
 
 

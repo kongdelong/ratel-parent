@@ -1,5 +1,6 @@
 package com.ratel.framework.repository;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ratel.framework.service.dto.RatelQueryCriteria;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,8 @@ import java.util.Optional;
  */
 @NoRepositoryBean
 public interface BaseRepository<T, ID extends Serializable> extends JpaRepository<T, ID>, JpaSpecificationExecutor<T> {
+
+    public JPAQueryFactory getJPAQueryFactory();
 
     /**
      * 封装自定义组合查询列表方法

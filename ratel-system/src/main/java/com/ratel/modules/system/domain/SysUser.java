@@ -44,7 +44,7 @@ public class SysUser extends BaseUuidEntity {
     @Email
     private String email;
 
-    @NotBlank
+//    @NotBlank
     private String phone;
 
     @NotNull
@@ -65,7 +65,6 @@ public class SysUser extends BaseUuidEntity {
 
     @Column(name = "sort")
     private Long sort = 999L;
-
 
     @Column(name = "ext1")
     private String ext1;

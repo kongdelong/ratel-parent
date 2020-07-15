@@ -143,7 +143,7 @@ public class SysUserController {
     @PostMapping
     @PreAuthorize("@ratel.check('user:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody SysUser resources) {
-        checkLevel(resources);
+        // checkLevel(resources);
         // 默认密码 123456
         resources.setPassword(passwordEncoder.encode("123456"));
         return FormsHttpEntity.ok(sysUserService.create(resources));
@@ -154,7 +154,7 @@ public class SysUserController {
     @PutMapping
     @PreAuthorize("@ratel.check('user:edit')")
     public ResponseEntity<Object> update(@Validated(SysUser.Update.class) @RequestBody SysUser resources) {
-        checkLevel(resources);
+        //checkLevel(resources);
         sysUserService.update(resources);
         return FormsHttpEntity.ok();
     }

@@ -10,6 +10,7 @@
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/ratel-modules/ratel-system/pom.xml" />
+        <option value="$PROJECT_DIR$/ratel-system-mongo/pom.xml" />
       </set>
     </option>
   </component>

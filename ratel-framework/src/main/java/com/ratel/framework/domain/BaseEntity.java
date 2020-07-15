@@ -7,11 +7,11 @@ import com.ratel.framework.domain.auditable.DefaultAuditable;
 import com.ratel.framework.domain.auditable.SaveUpdateAuditListener;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 import org.hibernate.envers.AuditOverride;
 import org.hibernate.envers.AuditOverrides;
 
+import javax.persistence.AccessType;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -21,17 +21,18 @@ import java.util.Date;
 @Access(AccessType.FIELD)
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "javassistLazyInitializer", "revisionEntity", "handler"}, ignoreUnknown = true)
 @MappedSuperclass
+@DynamicInsert
+@DynamicUpdate
 @EntityListeners({SaveUpdateAuditListener.class})
 @AuditOverrides({@AuditOverride(forClass = BaseEntity.class)})
 public abstract class BaseEntity<ID extends Serializable> extends AbstractPersistableEntity<ID> implements DefaultAuditable {
-
     //乐观锁版本
     //@Version
     //@Column(name = "version", nullable = false)
     //private Integer version = 0;
 
     @Column(name = "create_user_name", length = 256, updatable = false)
-    protected String createUserName = GlobalConstant.NONE_VALUE;
+    protected String createUserName;
 
     @Column(name = "create_user_id", length = 256, updatable = false)
     protected String createUserId;

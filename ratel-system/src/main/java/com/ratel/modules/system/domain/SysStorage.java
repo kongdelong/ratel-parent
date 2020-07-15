@@ -43,6 +43,12 @@ public class SysStorage extends BaseUuidEntity {
     private String path;
 
     /**
+     * 路径
+     */
+    @Column(name = "small_path")
+    private String smallPath;
+
+    /**
      * 类型
      */
     @Column(name = "type")
@@ -61,11 +67,12 @@ public class SysStorage extends BaseUuidEntity {
     private String thumbPath;
 
 
-    public SysStorage(String realName, String name, String suffix, String path, String type, String size, String attrPath, String thumbPath) {
+    public SysStorage(String realName, String name, String suffix, String path, String smallPath, String type, String size, String attrPath, String thumbPath) {
         this.realName = realName;
         this.name = name;
         this.suffix = suffix;
         this.path = path;
+        this.smallPath = smallPath;
         this.type = type;
         this.size = size;
         this.attrPath = attrPath;

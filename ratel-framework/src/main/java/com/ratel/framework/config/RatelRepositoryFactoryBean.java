@@ -22,7 +22,6 @@ public class RatelRepositoryFactoryBean<R extends JpaRepository<T, I>, T,
     @Override
     protected RepositoryFactorySupport createRepositoryFactory(EntityManager entityManager) {
         JpaRepositoryFactory jpaRepositoryFactory = new BaseRepositoryFactory(entityManager);
-//        jpaRepositoryFactory.addRepositoryProxyPostProcessor(new JpqlBeanPostProcessor());
         return jpaRepositoryFactory;
     }
 
@@ -40,7 +39,7 @@ public class RatelRepositoryFactoryBean<R extends JpaRepository<T, I>, T,
         //设置具体的实现类是BaseRepositoryImpl
         @Override
         protected JpaRepositoryImplementation<?, ?> getTargetRepository(RepositoryInformation information, EntityManager entityManager) {
-            return new RatelJpaRepository<T, I>((Class<T>) information.getDomainType(), entityManager, information);
+            return new RatelJpaRepository<T, I>((Class<T>) information.getDomainType(), entityManager);
         }
 
 

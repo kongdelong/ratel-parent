@@ -9,6 +9,7 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -19,6 +20,7 @@ import java.util.TimeZone;
 @EnableTransactionManagement
 @MapperScan("com.ratel.modules.*.mapper")
 @Configuration
+//@EnableJpaAuditing
 public class AppRun {
 
     public static void main(String[] args) {

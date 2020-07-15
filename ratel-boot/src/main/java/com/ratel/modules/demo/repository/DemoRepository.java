@@ -2,6 +2,7 @@ package com.ratel.modules.demo.repository;
 
 import com.ratel.framework.repository.BaseRepository;
 import com.ratel.modules.demo.domain.DemoDomain;
+import com.ratel.modules.demo.service.vo.DemoDomainVo;
 import com.ratel.modules.system.domain.SysUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,15 +10,18 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-//@Repository
+@Repository
+@Transactional
 public interface DemoRepository extends BaseRepository<DemoDomain, Long> {
 
 
     @Modifying
-    @Query(value = "update DemoDomain set systemStatus='0' where id=?1")
+    @Query(value = "update DemoDomain set username='0' where id=?1")
     void updateStatus(Long id);
 
 
@@ -31,6 +35,16 @@ public interface DemoRepository extends BaseRepository<DemoDomain, Long> {
     //根据用户id和firstName查询
     @Query(value = "from DemoDomain where id = ?2 and firstName = ?1")
     SysUser findUserByIdAndName(String username, int id);
+
+    //动态条件查询
+    @Query(value = "from DemoDomain where (?1 is null or username=?1) and (?2 is null or id=?2)")
+    List<DemoDomain> findUserBySql(String username, String id, Pageable pageable);
+
+    //联合查询
+    //@Query(value = "SELECT new com.ratel.modules.demo.service.vo.DemoDomainVo( b.teacherIdCard,b.teacherName,b.sex,b.highestDegree,b.specializedTechnicalJob,b.teacherStatus,c.schoolName) FROM ScheduleTeacher a  inner JOIN Teacher b on a.teacher.id=b.id LEFT JOIN School c on b.school.id=c.id WHERE a.schedule.id= :scheduleId")
+    @Query(value = "SELECT new com.ratel.modules.demo.service.vo.DemoDomainVo( a.age,b.username,b.nickName,b.sysDept)" +
+            " FROM DemoDomain a inner JOIN SysUser b on a.deptId=b.sysDept.id WHERE a.id= :id")
+    List<DemoDomainVo> getDemoDomainVo(@Param("id") Long id, Pageable pageable);
 
 
     @Query("select s from DemoDomain s where s.id = :id")

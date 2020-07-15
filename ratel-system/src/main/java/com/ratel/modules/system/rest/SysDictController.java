@@ -31,7 +31,7 @@ public class SysDictController {
     @RatelLog("导出字典数据")
     @ApiOperation("导出字典数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('dict:list')")
+    @PreAuthorize("@ratel.check('dict:list')")
     public void download(SysDictQueryCriteria criteria, HttpServletResponse response) throws IOException {
         sysDictService.download(sysDictService.queryAll(criteria), response);
     }

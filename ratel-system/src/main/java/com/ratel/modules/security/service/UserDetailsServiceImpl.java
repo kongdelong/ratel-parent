@@ -1,5 +1,6 @@
 package com.ratel.modules.security.service;
 
+import com.ratel.framework.GlobalConstant;
 import com.ratel.framework.exception.BadRequestException;
 import com.ratel.modules.security.domain.vo.JwtUser;
 import com.ratel.modules.system.domain.SysUser;
@@ -30,6 +31,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         } else {
             if (!user.getEnabled()) {
                 throw new BadRequestException("账号未激活");
+            }
+            if (!GlobalConstant.STATUS_VALUE.equals(user.getEnable())) {
+                throw new BadRequestException("账号状态异常");
             }
             return createJwtUser(user);
         }

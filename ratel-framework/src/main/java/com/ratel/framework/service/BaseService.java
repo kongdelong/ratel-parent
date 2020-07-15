@@ -1,11 +1,14 @@
 package com.ratel.framework.service;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ratel.framework.domain.AbstractPersistableEntity;
+import com.ratel.framework.repository.RatelJpaRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.transform.Transformers;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -50,7 +53,7 @@ public abstract class BaseService<T extends AbstractPersistableEntity, ID extend
         }
 
         //构造对应的JPA操作接口对象
-        this.jpaRepository = new SimpleJpaRepository(entityClass, entityManager);
+        this.jpaRepository = new RatelJpaRepository(entityClass, entityManager);
     }
 
     /**
