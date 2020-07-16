@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@RestController
+@Controller
 @RequestMapping("/oauth")
 @Slf4j
 public class OauthController {
@@ -149,7 +150,7 @@ public class OauthController {
 //            }
             model.put("scopeMap", scopeMap);
 
-            return "accessConfirmation";
+            return "redirect:wwww.baidu.com?client_id=" + client_id + "&applicationName=" + client.getApplicationName();
         }
     }
 
