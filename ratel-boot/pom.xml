@@ -23,6 +23,11 @@
         </dependency>
         <dependency>
             <groupId>com.ratel</groupId>
+            <artifactId>ratel-oauth2-server</artifactId>
+            <version>${ratel.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ratel</groupId>
             <artifactId>ratel-generator</artifactId>
             <version>${ratel.parent.version}</version>
         </dependency>

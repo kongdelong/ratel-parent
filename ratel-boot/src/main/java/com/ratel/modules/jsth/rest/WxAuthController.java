@@ -93,6 +93,30 @@ public class WxAuthController {
         return FormsHttpEntity.ok(map);
     }
 
+    @PostMapping(value = "qq")
+    public ResponseEntity loginByQqCommon(@RequestBody MongoUserLocationDomain resource, HttpServletRequest request) throws Exception {
+        //得到用户的openId + sessionKey
+        JSONObject jsonObject = getQqSessionCommon(resource.getAppid(), resource.getSecret(), resource.getCode());
+        String openId = jsonObject.getString("openid");
+
+        SysUser sysUser = sysUserService.findByUsername(openId);
+        if (sysUser == null) {
+            sysUser = new SysUser();
+            sysUser.setNickName(openId);
+            sysUser.setUsername(openId);
+            sysUser.setEnabled(true);
+            sysUser.setDataDomain("jsth");
+            sysUser = sysUserService.save(sysUser);
+            resource.setUserId(sysUser.getId());
+            resource.setOpenId(openId);
+            mongoUserLocationService.saveLocation(resource);
+        }
+        AuthCredentials authCredentials = new AuthCredentials();
+        authCredentials.setAuthtype(AuthCredentials.QYWX);
+        Map<String, Object> map = this.authService.getAuthUserMap(sysUser.getUsername(), authCredentials, request);
+        return FormsHttpEntity.ok(map);
+    }
+
     @PostMapping(value = "toutiao")
     public ResponseEntity loginByToutiao(@RequestBody MongoUserLocationDomain resource, HttpServletRequest request) throws Exception {
         //得到用户的openId + sessionKey
@@ -171,6 +195,36 @@ public class WxAuthController {
         requestUrlParam.put("grant_type", "authorization_code");
 
         JSONObject jsonObject = JSON.parseObject(sendPost(requestUrl, requestUrlParam));
+        return jsonObject;
+    }
+
+
+    /**
+     * 获取微信小程序的session_key和openid
+     *
+     * @param code 微信前端login()方法返回的code
+     * @return jsonObject
+     * @author hengyang4
+     */
+    public JSONObject getQqSessionCommon(String appid, String secret, String code) throws Exception {
+
+        //GET https://api.q.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code
+        //微信登录的code值
+        String wxCode = code;
+        //服务器端调用接口的url
+        String requestUrl = "https://api.q.qq.com/sns/jscode2session";
+        //封装需要的参数信息
+        Map<String, String> requestUrlParam = new HashMap<String, String>();
+        //开发者设置中的appId
+        requestUrlParam.put("appid", appid);
+        //开发者设置中的appSecret
+        requestUrlParam.put("secret", secret);
+        //小程序调用wx.login返回的code
+        requestUrlParam.put("js_code", wxCode);
+        //默认参数
+        requestUrlParam.put("grant_type", "authorization_code");
+
+        JSONObject jsonObject = JSON.parseObject(sendGet(requestUrl, requestUrlParam));
         return jsonObject;
     }
 

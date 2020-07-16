@@ -136,6 +136,7 @@ public class RetelBootSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/wx/auth").permitAll()
                 .antMatchers("/api/wx/auth/toutiao").permitAll()
                 .antMatchers("/api/wx/auth/common").permitAll()
+                .antMatchers("/api/wx/auth/qq").permitAll()
                 .antMatchers("/api/wx/userSetting/getUsers").permitAll()
                 // 文件
                 .antMatchers("/static/**").permitAll()

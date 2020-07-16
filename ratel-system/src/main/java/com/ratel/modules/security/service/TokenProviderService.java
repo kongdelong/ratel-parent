@@ -51,19 +51,23 @@ public class TokenProviderService implements InitializingBean {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String createToken(Authentication authentication) {
+    public String createToken(Authentication authentication, String tokenId, String clientId) {
+        JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
-
-        long now = (new Date()).getTime();
-        Date validity = new Date(now + properties.getTokenValidityInSeconds());
-
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + properties.getTokenValidityInSeconds());
         return Jwts.builder()
+                .claim("accountOpenCode", jwtUser.getId())
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(validity)
+                .setAudience(clientId)
+                .setId(tokenId)
+                .setNotBefore(now)
+                .setIssuedAt(now)
                 .compact();
     }
 

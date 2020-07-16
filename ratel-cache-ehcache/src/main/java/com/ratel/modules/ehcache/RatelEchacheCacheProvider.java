@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -22,22 +23,18 @@ public class RatelEchacheCacheProvider implements RatelCacheProvider {
 
     protected net.sf.ehcache.Cache cache;
 
-    protected static CacheManager manager = CacheManager.getInstance();
-
-    /**
-     * 构造方法
-     */
-    public RatelEchacheCacheProvider() {
-        this.cache = getCache(SYS_CACHE);
-    }
+    private final EhCacheCacheManager ehCacheCacheManager;
+    private CacheManager manager;
 
     /**
      * 构造方法
      *
-     * @param cacheName 缓存的名称
+     * @param ehCacheCacheManager
      */
-    public RatelEchacheCacheProvider(String cacheName) {
-        this.cache = getCache(cacheName);
+    public RatelEchacheCacheProvider(EhCacheCacheManager ehCacheCacheManager) {
+        this.ehCacheCacheManager = ehCacheCacheManager;
+        this.manager = ehCacheCacheManager.getCacheManager();
+        this.cache = getCache(SYS_CACHE);
     }
 
     protected net.sf.ehcache.Cache getCache(String name) {

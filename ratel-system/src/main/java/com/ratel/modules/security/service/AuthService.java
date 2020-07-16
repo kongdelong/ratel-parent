@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -22,6 +23,9 @@ public class AuthService {
 
     @Value("${ratel.single.login:false}")
     private Boolean singleLogin;
+
+    @Value("${ratel.oauth.clientId}")
+    private String clientId;
 
     @Autowired
     private SecurityProperties properties;
@@ -37,7 +41,8 @@ public class AuthService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         // 生成令牌
-        String token = tokenProviderService.createToken(authentication);
+        String tokenId = UUID.randomUUID().toString();
+        String token = tokenProviderService.createToken(authentication, tokenId, clientId);
         final JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
         // 保存在线信息
         onlineUserService.save(jwtUser, token, request);

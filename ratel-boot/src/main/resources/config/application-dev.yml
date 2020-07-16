@@ -42,7 +42,9 @@ spring:
       web-stat-filter:
         url-pattern: /*
         exclusions: "*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*"
-
+  cache:
+    ehcache:
+      config: classpath:/ehcache/ehcache-local.xml
   data:
     mongodb:
       database: doracms2

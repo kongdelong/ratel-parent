@@ -15,9 +15,9 @@ spring:
       #格式化输出
       #indent_output: true
       #deserialization:
-      #允许对象忽略json中不存在的属性
-      #fail_on_unknown_properties: false
-      #parser:
+    #允许对象忽略json中不存在的属性
+    #fail_on_unknown_properties: false
+    #parser:
     #允许出现特殊字符和转义符
     #allow_unquoted_control_chars: true
     #允许出现单引号
@@ -33,7 +33,7 @@ spring:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         session_factory:
           statement_inspector: com.ratel.modules.SqlStatementInspector
-#          interceptor: com.ratel.framework.domain.interceptor.HibernateInterceptor
+  #          interceptor: com.ratel.framework.domain.interceptor.HibernateInterceptor
 
   servlet:
     multipart:
@@ -57,6 +57,9 @@ ratel:
     deptId: dddd
     deptName: dddd
     roles: jddd,dddd,dddd
+
+  oauth:
+    clientId: system
 
   task:
     pool:
