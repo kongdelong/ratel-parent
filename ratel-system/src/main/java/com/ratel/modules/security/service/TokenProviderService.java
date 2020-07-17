@@ -102,12 +102,7 @@ public class TokenProviderService implements InitializingBean {
 
     }
 
-    public Authentication getAuthentication(String token, OnlineUser onlineUser) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(key)
-                .parseClaimsJws(token)
-                .getBody();
-
+    public Authentication getAuthentication(Claims claims, String token, OnlineUser onlineUser) {
         Collection<? extends GrantedAuthority> authorities = StringUtils.isNotBlank(claims.get(AUTHORITIES_KEY).toString()) ?
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                         .map(SimpleGrantedAuthority::new)
@@ -133,6 +128,14 @@ public class TokenProviderService implements InitializingBean {
         //JwtUser principal = new JwtUser(claims.getSubject(), "", authorities);
         UserDetails principal = userDetailsService.loadUserByUsername(claims.getSubject());
         return (JwtUser) principal;
+    }
+
+    public Claims getJwtBody(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(key)
+                .parseClaimsJws(token)
+                .getBody();
+        return claims;
     }
 
     public boolean validateToken(String authToken) {
@@ -164,18 +167,18 @@ public class TokenProviderService implements InitializingBean {
     }
 
     /**
-     * @param token 需要检查的token
+     * @param tokenId 需要检查的token
      */
-    public void checkRenewal(String token) {
+    public void checkRenewal(String tokenId) {
         // 判断是否续期token,计算token的过期时间
-        long time = ratelCacheProvider.getExpire(properties.getOnlineKey() + token) * 1000;
+        long time = ratelCacheProvider.getExpire(properties.getOnlineKey() + tokenId) * 1000;
         Date expireDate = DateUtil.offset(new Date(), DateField.MILLISECOND, (int) time);
         // 判断当前时间与过期时间的时间差
         long differ = expireDate.getTime() - new Date().getTime();
         // 如果在续期检查的范围内，则续期
         if (differ <= properties.getDetect()) {
             long renew = time + properties.getRenew();
-            ratelCacheProvider.expire(properties.getOnlineKey() + token, renew, TimeUnit.MILLISECONDS);
+            ratelCacheProvider.expire(properties.getOnlineKey() + tokenId, renew, TimeUnit.MILLISECONDS);
         }
     }
 

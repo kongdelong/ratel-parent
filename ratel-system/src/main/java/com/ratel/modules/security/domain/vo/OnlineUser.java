@@ -3,6 +3,7 @@ package com.ratel.modules.security.domain.vo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.Authentication;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OnlineUser implements Serializable {
+    private Authentication authentication;
 
     private String userName;
 
@@ -29,4 +31,6 @@ public class OnlineUser implements Serializable {
     private Date loginTime;
 
     private JwtUser jwtUser;
+
+
 }

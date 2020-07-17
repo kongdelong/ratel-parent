@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -70,7 +70,7 @@ public class OauthController {
                                                               @RequestParam(value = "username", required = false) String username,
                                                               @RequestParam(value = "password", required = false) String password) {
         Map<String, Object> result = new HashMap<>(16);
-        OauthClient client = oauthClientService.findByClientId(client_id);
+        OauthClient client = oauthClientService.findByClientIdAndClientSecret(client_id, client_secret);
         HttpHeaders headers = new HttpHeaders();
 
         if (client == null) {
@@ -113,14 +113,13 @@ public class OauthController {
     }
 
     @GetMapping("/authorize")
-    public void getAccessToken(ModelMap model,
-                               Authentication authentication,
-                               @RequestHeader(name = "referer", required = false) String referer,
-                               @RequestParam(value = "client_id") String client_id,
-                               @RequestParam(value = "response_type") String response_type,
-                               @RequestParam(value = "state", required = false) String state,
-                               @RequestParam(value = "scope", required = false) String scopes,
-                               @RequestParam(value = "redirect_uri") String redirect_uri, HttpServletResponse response) throws IOException {
+    public String getAccessToken(Authentication authentication,
+                                 @RequestHeader(name = "referer", required = false) String referer,
+                                 @RequestParam(value = "client_id") String client_id,
+                                 @RequestParam(value = "response_type") String response_type,
+                                 @RequestParam(value = "state", required = false) String state,
+                                 @RequestParam(value = "scope", required = false) String scopes,
+                                 @RequestParam(value = "redirect_uri") String redirect_uri, HttpServletResponse response) throws IOException {
         OauthClient client = oauthClientService.findByClientId(client_id);
 
         if (client == null || !StringUtils.equalsIgnoreCase(client.getWebServerRedirectUri(), redirect_uri)) {
@@ -140,12 +139,12 @@ public class OauthController {
                 response.sendRedirect(client.getWebServerRedirectUri() + "?code=" + uuid + "&state=" + state);
             }
         } else {
-            model.put("client_id", client_id);
-            model.put("applicationName", client.getApplicationName());
-            model.put("from", referer);
-            model.put("state", state);
-            model.put("redirect_uri", redirect_uri);
-            Map<String, String> scopeMap = new LinkedHashMap<>();
+//            model.put("client_id", client_id);
+//            model.put("applicationName", client.getApplicationName());
+//            model.put("from", referer);
+//            model.put("state", state);
+//            model.put("redirect_uri", redirect_uri);
+//            Map<String, String> scopeMap = new LinkedHashMap<>();
 //            for (String scope : scopes.split(",")) {
 //                ScopeDefinition scopeDefinition = scopeDefinitionService.findByScope(scope);
 //                if (scopeDefinition != null) {
@@ -154,23 +153,30 @@ public class OauthController {
 //                    scopeMap.put("scope." + scope, scope);
 //                }
 //            }
-            model.put("scopeMap", scopeMap);
-            response.sendRedirect(loginPath + "/#/oauth?client_id=" + client_id + "&applicationName=" + client.getApplicationName());
+//            model.put("scopeMap", scopeMap);
+            response.sendRedirect(loginPath + "/#/oauth"
+                    + "?client_id=" + (!StringUtils.isBlank(client_id) ? URLEncoder.encode(client_id, "UTF-8") : "")
+                    + "&applicationName=" + (!StringUtils.isBlank(client.getApplicationName()) ? URLEncoder.encode(client.getApplicationName(), "UTF-8") : "")
+                    + "&from=" + (!StringUtils.isBlank(referer) ? URLEncoder.encode(referer, "UTF-8") : "")
+                    + "&state=" + (!StringUtils.isBlank(state) ? URLEncoder.encode(state, "UTF-8") : "")
+                    + "&redirect_uri=" + (!StringUtils.isBlank(redirect_uri) ? URLEncoder.encode(redirect_uri, "UTF-8") : "")
+            );
             //return "forward:" + loginPath + "/#/oauth?client_id=" + client_id + "&applicationName=" + client.getApplicationName();
         }
+        return null;
     }
 
     @PostMapping("/authorize")
-    public void postAccessToken(ModelMap model,
-                                Authentication authentication,
-                                @RequestParam(name = "referer", required = false) String referer,
-                                @RequestParam(value = "client_id") String client_id,
-                                @RequestParam(value = "response_type", required = false) String response_type,
-                                @RequestParam(value = "state", required = false) String state,
-                                @RequestParam(value = "scope", required = false) String scope,
-                                @RequestParam(value = "user_oauth_approval", required = false, defaultValue = "false") boolean userOauthApproval,
-                                @RequestParam(value = "redirect_uri") String redirect_uri,
-                                HttpServletResponse response) throws IOException {
+    public String postAccessToken(ModelMap model,
+                                  Authentication authentication,
+                                  @RequestParam(name = "referer", required = false) String referer,
+                                  @RequestParam(value = "client_id") String client_id,
+                                  @RequestParam(value = "response_type", required = false) String response_type,
+                                  @RequestParam(value = "state", required = false) String state,
+                                  @RequestParam(value = "scope", required = false) String scope,
+                                  @RequestParam(value = "user_oauth_approval", required = false, defaultValue = "false") boolean userOauthApproval,
+                                  @RequestParam(value = "redirect_uri") String redirect_uri,
+                                  HttpServletResponse response) throws IOException {
         OauthClient client = oauthClientService.findByClientId(client_id);
         model.put("client_id", client_id);
         model.put("applicationName", client.getApplicationName());
@@ -191,6 +197,7 @@ public class OauthController {
                 response.sendRedirect(redirect_uri + "&state=" + state + "?error=not_approval");
             }
         }
+        return null;
     }
 
     @ResponseBody

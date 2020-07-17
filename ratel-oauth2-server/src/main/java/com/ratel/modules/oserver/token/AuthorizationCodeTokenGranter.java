@@ -1,12 +1,13 @@
 package com.ratel.modules.oserver.token;
 
+import com.ratel.framework.modules.cache.RatelCacheProvider;
 import com.ratel.framework.modules.system.domain.RatelUser;
-import com.ratel.modules.oserver.config.CachesEnum;
 import com.ratel.modules.oserver.domain.OauthClient;
 import com.ratel.modules.oserver.exception.OAuth2Exception;
+import com.ratel.modules.security.config.SecurityProperties;
+import com.ratel.modules.security.domain.vo.OnlineUser;
 import com.ratel.modules.security.service.TokenProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -26,6 +27,16 @@ public class AuthorizationCodeTokenGranter implements TokenGranter {
     TokenProviderService tokenProviderService;
 
     @Autowired
+    private SecurityProperties properties;
+
+    @Autowired
+    private RatelCacheProvider ratelCacheProvider;
+
+
+//    @Autowired
+//    private RatelCacheProvider ratelCacheProvider;
+
+    @Autowired
     CacheManager cacheManager;
 
     @Override
@@ -41,10 +52,11 @@ public class AuthorizationCodeTokenGranter implements TokenGranter {
         if (authorizationCode == null) {
             throw new OAuth2Exception("An authorization code must be supplied.", HttpStatus.BAD_REQUEST, "invalid_request");
         }
-        Cache.ValueWrapper storedCode = cacheManager.getCache(CachesEnum.Oauth2AuthorizationCodeCache.name()).get(authorizationCode);
-        if (storedCode != null) {
 
-            Authentication userAuth = (Authentication) (storedCode.get());
+        OnlineUser user = (OnlineUser) ratelCacheProvider.get(properties.getOnlineKey() + authorizationCode);
+
+        if (user != null) {
+            Authentication userAuth = user.getAuthentication();
             RatelUser userInfo = (RatelUser) userAuth.getPrincipal();
 
             String tokenId = UUID.randomUUID().toString();
@@ -86,7 +98,7 @@ public class AuthorizationCodeTokenGranter implements TokenGranter {
 //                    .signWith(keyPair.getPrivate())
 //                    .compact();
 
-            cacheManager.getCache(CachesEnum.Oauth2AuthorizationCodeCache.name()).evictIfPresent(authorizationCode);
+//            cacheManager.getCache(CachesEnum.Oauth2AuthorizationCodeCache.name()).evictIfPresent(authorizationCode);
 
             result.put("access_token", accessToken);
             result.put("token_type", "bearer");

@@ -69,7 +69,7 @@ public class PasswordTokenGranter implements TokenGranter {
 //        Date tokenExpiration = Date.from(LocalDateTime.now().plusSeconds(client.getAccessTokenValidity()).atZone(ZoneId.systemDefault()).toInstant());
 //        Date refreshTokenExpiration = Date.from(LocalDateTime.now().plusSeconds(client.getAccessTokenValidity()).atZone(ZoneId.systemDefault()).toInstant());
 
-        String tokenId = UUID.randomUUID().toString();
+        String tokenId = UUID.randomUUID().toString().replace("-", "");
         String accessToken = tokenProviderService.createToken(userAuth, tokenId, clientId);
         RatelUser userInfo = (RatelUser) userAuth.getPrincipal();
 

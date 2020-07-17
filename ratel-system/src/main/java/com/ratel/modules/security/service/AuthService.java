@@ -41,14 +41,15 @@ public class AuthService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         // 生成令牌
-        String tokenId = UUID.randomUUID().toString();
+        String tokenId = UUID.randomUUID().toString().replace("-", "");
         String token = tokenProviderService.createToken(authentication, tokenId, clientId);
         final JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
         // 保存在线信息
-        onlineUserService.save(jwtUser, token, request);
+        onlineUserService.save(authentication, jwtUser, tokenId, token, request);
         // 返回 token 与 用户信息
         Map<String, Object> authInfo = new HashMap<String, Object>(2) {{
             put("token", properties.getTokenStartWith() + token);
+            put("tokenId", tokenId);
             put("user", jwtUser);
         }};
         if (singleLogin) {

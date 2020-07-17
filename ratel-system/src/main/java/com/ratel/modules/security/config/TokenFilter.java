@@ -4,6 +4,7 @@ import com.ratel.framework.utils.SpringContextHolder;
 import com.ratel.modules.security.domain.vo.OnlineUser;
 import com.ratel.modules.security.service.OnlineUserService;
 import com.ratel.modules.security.service.TokenProviderService;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -46,16 +47,19 @@ public class TokenFilter extends GenericFilterBean {
 
         SecurityProperties properties = SpringContextHolder.getBean(SecurityProperties.class);
         OnlineUserService onlineUserService = SpringContextHolder.getBean(OnlineUserService.class);
-        OnlineUser onlineUser = onlineUserService.getOne(properties.getOnlineKey() + token);
 
         try {
             if (StringUtils.hasText(token) && tokenProviderService.validateToken(token)) {
+                Claims tokenBody = tokenProviderService.getJwtBody(token);
+                OnlineUser onlineUser = onlineUserService.getOne(properties.getOnlineKey() + tokenBody.getId());
                 if (onlineUser == null) {
-                    onlineUser = onlineUserService.save(tokenProviderService.getJwtUser(token), token, (HttpServletRequest) servletRequest);
+                    // onlineUser = onlineUserService.save(tokenProviderService.getJwtUser(token), token, (HttpServletRequest) servletRequest);
+                    httpServletResponse.setStatus(401);
+                    return;
                 }
-                authentication = tokenProviderService.getAuthentication(token, onlineUser);
+                authentication = tokenProviderService.getAuthentication(tokenBody, token, onlineUser);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                //tokenProvider.checkRenewal(token); //续期
+                tokenProviderService.checkRenewal(tokenBody.getId()); //续期
             } else {
                 log.debug("no valid JWT token found, uri: {}", requestRri);
             }

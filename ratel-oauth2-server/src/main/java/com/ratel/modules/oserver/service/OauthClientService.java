@@ -24,4 +24,8 @@ public class OauthClientService extends BaseService<SysUser, String> {
     public OauthClient findByClientId(String clientId) {
         return oauthClientRepository.findByClientId(clientId);
     }
+
+    public OauthClient findByClientIdAndClientSecret(String clientId, String clientSecret) {
+        return oauthClientRepository.findByClientIdAndClientSecret(clientId, clientSecret);
+    }
 }

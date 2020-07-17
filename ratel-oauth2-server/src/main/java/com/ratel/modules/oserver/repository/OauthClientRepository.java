@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface OauthClientRepository extends BaseRepository<OauthClient, String> {
 
     OauthClient findByClientId(String clientId);
+
+    OauthClient findByClientIdAndClientSecret(String clientId, String secret);
 }

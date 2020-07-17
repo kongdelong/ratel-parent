@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,18 +38,18 @@ public class OnlineUserService {
      * @param token   /
      * @param request /
      */
-    public OnlineUser save(JwtUser jwtUser, String token, HttpServletRequest request) {
+    public OnlineUser save(Authentication authentication, JwtUser jwtUser, String tokenId, String token, HttpServletRequest request) {
         String deptName = jwtUser.getDeptName();
         String ip = StringUtils.getIp(request);
         String browser = StringUtils.getBrowser(request);
         String address = StringUtils.getCityInfo(ip);
         OnlineUser onlineUser = null;
         try {
-            onlineUser = new OnlineUser(jwtUser.getUsername(), jwtUser.getNickName(), deptName, browser, ip, address, EncryptUtils.desEncrypt(token), new Date(), jwtUser);
+            onlineUser = new OnlineUser(authentication, jwtUser.getUsername(), jwtUser.getNickName(), deptName, browser, ip, address, EncryptUtils.desEncrypt(token), new Date(), jwtUser);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ratelCacheProvider.set(properties.getOnlineKey() + token, onlineUser, properties.getTokenValidityInSeconds() / 1000);
+        ratelCacheProvider.set(properties.getOnlineKey() + tokenId, onlineUser, properties.getTokenValidityInSeconds() / 1000);
         return onlineUser;
     }
 
