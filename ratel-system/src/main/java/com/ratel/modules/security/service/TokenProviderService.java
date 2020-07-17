@@ -13,6 +13,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,6 +24,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Arrays;
@@ -51,6 +54,15 @@ public class TokenProviderService implements InitializingBean {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
+    // 由字符串生成加密key
+    public static SecretKey generalKey(String secret) {
+        // 本地的密码解码
+        byte[] encodedKey = Base64.decodeBase64(secret);
+        // 根据给定的字节数组使用AES加密算法构造一个密钥
+        SecretKey key = new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
+        return key;
+    }
+
     public String createToken(Authentication authentication, String tokenId, String clientId) {
         JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
         String authorities = authentication.getAuthorities().stream()
@@ -59,16 +71,35 @@ public class TokenProviderService implements InitializingBean {
         Date now = new Date();
         Date validity = new Date(now.getTime() + properties.getTokenValidityInSeconds());
         return Jwts.builder()
+                .setHeaderParam("alg", "HS512")
+                .setHeaderParam("typ", "JWT")
                 .claim("accountOpenCode", jwtUser.getId())
+                .setIssuer(properties.getIssuer())
                 .setSubject(authentication.getName())
-                .claim(AUTHORITIES_KEY, authorities)
-                .signWith(key, SignatureAlgorithm.HS512)
-                .setExpiration(validity)
                 .setAudience(clientId)
-                .setId(tokenId)
+                .claim(AUTHORITIES_KEY, authorities)
+                .setExpiration(validity)
                 .setNotBefore(now)
                 .setIssuedAt(now)
+                .setId(tokenId)
+                .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
+
+//       String accessToken = Jwts.builder()
+//                .setHeaderParam("alg", "HS256")
+//                .setHeaderParam("typ", "JWT")
+//                .claim("accountOpenCode", userInfo.getId())
+//                .setIssuer(issuer)
+//                .setSubject(userInfo.getUsername())
+//                .setAudience(clientId)
+//                .claim("roles", userInfo.getAuthorities().stream().map(e -> e.getAuthority()).collect(Collectors.toList()))
+//                .setExpiration(tokenExpiration)
+//                .setNotBefore(now)
+//                .setIssuedAt(now)
+//                .setId(tokenId)
+//                .signWith(keyPair.getPrivate())
+//                .compact();
+
     }
 
     public Authentication getAuthentication(String token, OnlineUser onlineUser) {
@@ -83,7 +114,7 @@ public class TokenProviderService implements InitializingBean {
                         .collect(Collectors.toList()) : null;
 
         //JwtUser principal = new JwtUser(claims.getSubject(), "", authorities);
-//        UserDetails principal = userDetailsService.loadUserByUsername(claims.getSubject());
+        //UserDetails principal = userDetailsService.loadUserByUsername(claims.getSubject());
         UserDetails principal = onlineUser.getJwtUser();
         return new UsernamePasswordAuthenticationToken(principal, new AuthCredentials(token), authorities);
     }

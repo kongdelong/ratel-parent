@@ -11,7 +11,19 @@
 	<cache name="sysCache" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
 
 	<!-- 用户缓存 -->
-	<cache name="userCache" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
+	<cache name="sysUser" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
+	<!-- 角色缓存 -->
+	<cache name="sysRole" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
+	<!-- 数据字典缓存 -->
+	<cache name="sysDict" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
+	<cache name="sysDictDetail" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
+	<!-- 存储典缓存 -->
+	<cache name="sysStorage" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
+	<cache name="sysDept" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
+
+	<cache name="sysMenu" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
+	<cache name="oauthClient" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
+	<cache name="genConfig" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
 
 	<!-- 集团缓存 -->
 	<cache name="corpCache" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>

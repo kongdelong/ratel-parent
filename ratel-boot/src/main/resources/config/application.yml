@@ -83,9 +83,9 @@ ratel:
     expiration: 2
 
   #缓存设置
-  ehcache:
-    configFile: ehcache/ehcache-local.xml
-    defaultCacheName: sysCache
+  #ehcache:
+  # configFile: ehcache/ehcache-local.xml
+  # defaultCacheName: sysCache
   #  ehcache:
   #    configFile: cache/ehcache-rmi.xml
 
