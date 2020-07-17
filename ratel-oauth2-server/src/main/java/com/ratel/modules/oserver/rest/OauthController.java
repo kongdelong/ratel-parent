@@ -154,7 +154,7 @@ public class OauthController {
 //            }
             model.put("scopeMap", scopeMap);
 
-            return "redirect:" + loginPath + "?client_id=" + client_id + "&applicationName=" + client.getApplicationName();
+            return "redirect:" + loginPath + "/#/oauth?client_id=" + client_id + "&applicationName=" + client.getApplicationName();
         }
     }
 
