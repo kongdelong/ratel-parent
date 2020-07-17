@@ -60,6 +60,7 @@ ratel:
 
   oauth:
     clientId: system
+    loginPath: http://localhost:8001/#/oauth
 
   task:
     pool:

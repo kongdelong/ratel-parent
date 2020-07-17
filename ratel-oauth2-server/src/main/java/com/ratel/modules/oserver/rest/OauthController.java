@@ -10,6 +10,7 @@ import com.ratel.modules.oserver.token.RefreshTokenGranter;
 import com.ratel.modules.security.service.TokenProviderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -52,6 +53,9 @@ public class OauthController {
 
     @Autowired
     TokenProviderService tokenProviderService;
+
+    @Value("${ratel.oauth.loginPath}")
+    String loginPath;
 
     @PostMapping("/token")
     public ResponseEntity<Map<String, Object>> getAccessToken(@RequestParam(value = "client_id", required = false) String client_id,
@@ -150,7 +154,7 @@ public class OauthController {
 //            }
             model.put("scopeMap", scopeMap);
 
-            return "redirect:wwww.baidu.com?client_id=" + client_id + "&applicationName=" + client.getApplicationName();
+            return "redirect:" + loginPath + "?client_id=" + client_id + "&applicationName=" + client.getApplicationName();
         }
     }
 
