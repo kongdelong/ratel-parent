@@ -20,6 +20,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -111,21 +113,21 @@ public class OauthController {
     }
 
     @GetMapping("/authorize")
-    public String getAccessToken(ModelMap model,
-                                 Authentication authentication,
-                                 @RequestHeader(name = "referer", required = false) String referer,
-                                 @RequestParam(value = "client_id") String client_id,
-                                 @RequestParam(value = "response_type") String response_type,
-                                 @RequestParam(value = "state", required = false) String state,
-                                 @RequestParam(value = "scope", required = false) String scopes,
-                                 @RequestParam(value = "redirect_uri") String redirect_uri) {
+    public void getAccessToken(ModelMap model,
+                               Authentication authentication,
+                               @RequestHeader(name = "referer", required = false) String referer,
+                               @RequestParam(value = "client_id") String client_id,
+                               @RequestParam(value = "response_type") String response_type,
+                               @RequestParam(value = "state", required = false) String state,
+                               @RequestParam(value = "scope", required = false) String scopes,
+                               @RequestParam(value = "redirect_uri") String redirect_uri, HttpServletResponse response) throws IOException {
         OauthClient client = oauthClientService.findByClientId(client_id);
 
         if (client == null || !StringUtils.equalsIgnoreCase(client.getWebServerRedirectUri(), redirect_uri)) {
             if (redirect_uri.indexOf("?") > 0) {
-                return "redirect:" + redirect_uri + "&error=invalid_client";
+                response.sendRedirect(redirect_uri + "&error=invalid_client");
             } else {
-                return "redirect:" + redirect_uri + "?error=invalid_client";
+                response.sendRedirect(redirect_uri + "?error=invalid_client");
             }
         }
 
@@ -133,9 +135,9 @@ public class OauthController {
             String uuid = UUID.randomUUID().toString().replace("-", "");
             cacheManager.getCache(CachesEnum.Oauth2AuthorizationCodeCache.name()).put(uuid, authentication);
             if (client.getWebServerRedirectUri().indexOf("?") > 0) {
-                return "redirect:" + client.getWebServerRedirectUri() + "&code=" + uuid + "&state=" + state;
+                response.sendRedirect(client.getWebServerRedirectUri() + "&code=" + uuid + "&state=" + state);
             } else {
-                return "redirect:" + client.getWebServerRedirectUri() + "?code=" + uuid + "&state=" + state;
+                response.sendRedirect(client.getWebServerRedirectUri() + "?code=" + uuid + "&state=" + state);
             }
         } else {
             model.put("client_id", client_id);
@@ -153,21 +155,22 @@ public class OauthController {
 //                }
 //            }
             model.put("scopeMap", scopeMap);
-
-            return "redirect:" + loginPath + "/#/oauth?client_id=" + client_id + "&applicationName=" + client.getApplicationName();
+            response.sendRedirect(loginPath + "/#/oauth?client_id=" + client_id + "&applicationName=" + client.getApplicationName());
+            //return "forward:" + loginPath + "/#/oauth?client_id=" + client_id + "&applicationName=" + client.getApplicationName();
         }
     }
 
     @PostMapping("/authorize")
-    public String postAccessToken(ModelMap model,
-                                  Authentication authentication,
-                                  @RequestParam(name = "referer", required = false) String referer,
-                                  @RequestParam(value = "client_id") String client_id,
-                                  @RequestParam(value = "response_type", required = false) String response_type,
-                                  @RequestParam(value = "state", required = false) String state,
-                                  @RequestParam(value = "scope", required = false) String scope,
-                                  @RequestParam(value = "user_oauth_approval", required = false, defaultValue = "false") boolean userOauthApproval,
-                                  @RequestParam(value = "redirect_uri") String redirect_uri) {
+    public void postAccessToken(ModelMap model,
+                                Authentication authentication,
+                                @RequestParam(name = "referer", required = false) String referer,
+                                @RequestParam(value = "client_id") String client_id,
+                                @RequestParam(value = "response_type", required = false) String response_type,
+                                @RequestParam(value = "state", required = false) String state,
+                                @RequestParam(value = "scope", required = false) String scope,
+                                @RequestParam(value = "user_oauth_approval", required = false, defaultValue = "false") boolean userOauthApproval,
+                                @RequestParam(value = "redirect_uri") String redirect_uri,
+                                HttpServletResponse response) throws IOException {
         OauthClient client = oauthClientService.findByClientId(client_id);
         model.put("client_id", client_id);
         model.put("applicationName", client.getApplicationName());
@@ -177,15 +180,15 @@ public class OauthController {
             String uuid = UUID.randomUUID().toString().replace("-", "");
             cacheManager.getCache(CachesEnum.Oauth2AuthorizationCodeCache.name()).put(uuid, authentication);
             if (client.getWebServerRedirectUri().indexOf("?") > 0) {
-                return "redirect:" + client.getWebServerRedirectUri() + "&code=" + uuid + "&state=" + state;
+                response.sendRedirect(client.getWebServerRedirectUri() + "&code=" + uuid + "&state=" + state);
             } else {
-                return "redirect:" + client.getWebServerRedirectUri() + "?code=" + uuid + "&state=" + state;
+                response.sendRedirect(client.getWebServerRedirectUri() + "?code=" + uuid + "&state=" + state);
             }
         } else {
             if (redirect_uri.indexOf("?") > 0) {
-                return "redirect:" + redirect_uri + "&state=" + state + "&error=not_approval";
+                response.sendRedirect(redirect_uri + "&state=" + state + "&error=not_approval");
             } else {
-                return "redirect:" + redirect_uri + "&state=" + state + "?error=not_approval";
+                response.sendRedirect(redirect_uri + "&state=" + state + "?error=not_approval");
             }
         }
     }
