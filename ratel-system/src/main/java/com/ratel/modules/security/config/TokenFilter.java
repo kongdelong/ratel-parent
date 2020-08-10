@@ -53,9 +53,9 @@ public class TokenFilter extends GenericFilterBean {
                 Claims tokenBody = tokenProviderService.getJwtBody(token);
                 OnlineUser onlineUser = onlineUserService.getOne(properties.getOnlineKey() + tokenBody.getId());
                 if (onlineUser == null) {
-                    onlineUser = onlineUserService.save(authentication, tokenProviderService.getJwtUser(token), token, (HttpServletRequest) servletRequest);
-//                    httpServletResponse.setStatus(401);
-//                    return;
+                    //onlineUser = onlineUserService.save(authentication, tokenProviderService.getJwtUser(token), token, (HttpServletRequest) servletRequest);
+                    httpServletResponse.setStatus(401);
+                    return;
                 }
                 authentication = tokenProviderService.getAuthentication(tokenBody, token, onlineUser);
                 SecurityContextHolder.getContext().setAuthentication(authentication);

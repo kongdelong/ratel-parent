@@ -2,12 +2,18 @@
 spring:
   datasource:
     druid:
-      db-type: com.alibaba.druid.pool.DruidDataSource
-      driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-      url: jdbc:log4jdbc:mysql://www.dsqhost.com:3306/s5?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true
+      #db-type: com.alibaba.druid.pool.DruidDataSource
+      #driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+      #url: jdbc:log4jdbc:mysql://www.dsqhost.com:3306/s5?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true
       #      url: jdbc:log4jdbc:mysql://49.233.218.60:3306/rate_app?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
-      username: root
-      password: Dongsiqi#12
+      #username: root
+      #password: Dongsiqi#12
+      db-type: com.alibaba.druid.pool.DruidDataSource
+      driverClassName: com.mysql.jdbc.Driver
+      url: jdbc:mysql://152.136.133.34:3309/s5?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true
+      #      url: jdbc:log4jdbc:mysql://49.233.218.60:3306/rate_app?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+      username: sc
+      password: 123456
       #      password: Dongsiqi#12
 
       #      url: jdbc:log4jdbc:mysql://111.229.220.40:3389/yn_yqdp?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
@@ -93,8 +99,8 @@ ratel:
     token-start-with: Bearer
     # 必须使用最少88位的Base64对该令牌进行编码
     base64-secret: ZmQ0ZGI5NjQ0MDQwY2I4MjMxY2Y3ZmI3MjdhN2ZmMjNhODViOTg1ZGE0NTBjMGM4NDA5NzYxMjdjOWMwYWRmZTBlZjlhNGY3ZTg4Y2U3YTE1ODVkZDU5Y2Y3OGYwZWE1NzUzNWQ2YjFjZDc0NGMxZWU2MmQ3MjY1NzJmNTE0MzI=
-    # 令牌过期时间 此处单位/毫秒 ，默认4小时，可在此网站生成 https://www.convertworld.com/zh-hans/time/milliseconds.html
-    token-validity-in-seconds: 14400000000000000
+    # 令牌过期时间 此处单位/毫秒 ，默认4小时，可在此网站生成 https://www.convertworld.com/zh-hans/time/milliseconds.html  最大值2147483647000
+    token-validity-in-seconds: 2147483647000
     # 在线用户key
     online-key: online-token
     # 验证码
