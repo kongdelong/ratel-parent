@@ -40,7 +40,6 @@ public class SysDeptService extends BaseService<SysDept, String> {
         return sysDeptRepository.findById(id).orElseGet(SysDept::new);
     }
 
-    @Cacheable
     public List<SysDept> findByPid(String pid) {
         return sysDeptRepository.findByPid(pid);
     }

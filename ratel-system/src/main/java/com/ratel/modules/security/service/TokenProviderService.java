@@ -63,7 +63,7 @@ public class TokenProviderService implements InitializingBean {
         return key;
     }
 
-    public String createToken(Authentication authentication, String tokenId, String clientId) {
+    public String createToken(Authentication authentication, String clientId) {
         JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -81,7 +81,7 @@ public class TokenProviderService implements InitializingBean {
                 .setExpiration(validity)
                 .setNotBefore(now)
                 .setIssuedAt(now)
-                .setId(tokenId)
+                .setId(jwtUser.getId())
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 

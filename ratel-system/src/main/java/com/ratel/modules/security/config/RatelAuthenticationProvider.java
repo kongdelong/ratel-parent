@@ -41,9 +41,10 @@ public class RatelAuthenticationProvider implements AuthenticationProvider {
         if (AuthCredentials.QYWX.equals(authCredentials.getAuthtype())) {
             log.warn("企业微信登录，不需要校验密码！");
         } else {
-            String password = passwordEncoder.encode(authCredentials.getPassword());
-            if (passwordEncoder.matches(user.getPassword(), password)) {
-                throw new DisabledException("Wrong password.");
+//            String password = passwordEncoder.encode(authCredentials.getPassword());
+
+            if (!passwordEncoder.matches(authCredentials.getPassword(), user.getPassword())) {
+                throw new DisabledException("用户名密码错误！");
             }
         }
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();

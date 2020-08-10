@@ -16,6 +16,9 @@ public class SysDeptQueryCriteria {
     @Query(type = Query.Type.INNER_LIKE)
     private String name;
 
+    @Query(type = Query.Type.INNER_LIKE)
+    private String type;
+
     @Query
     private Boolean enabled;
 

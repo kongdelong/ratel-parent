@@ -40,7 +40,7 @@ public class SysRoleController {
     @Autowired
     private SysUserService sysUserService;
 
-    private static final String ENTITY_NAME = "role";
+    private static final String ENTITY_NAME = "sysRole";
 
 
     @ApiOperation("获取单个role")

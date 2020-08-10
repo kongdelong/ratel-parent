@@ -68,6 +68,11 @@ public abstract class BaseService<T extends AbstractPersistableEntity, ID extend
         return jpaRepository.save(entity);
     }
 
+
+    @Transactional
+    public T saveAndFlush(T entity) {
+        return jpaRepository.saveAndFlush(entity);
+    }
     /**
      * Saves all given entities.
      *
@@ -226,4 +231,5 @@ public abstract class BaseService<T extends AbstractPersistableEntity, ID extend
     public void updateDomain(String id, String prop, String value) {
 
     }
+
 }

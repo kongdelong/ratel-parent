@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -82,7 +83,8 @@ public class SysUserService extends BaseService<SysUser, String> {
         return sysUserRepository.save(resources);
     }
 
-    @CacheEvict(allEntries = true)
+    //@CacheEvict(allEntries = true)
+    @Caching(evict = {@CacheEvict(key = "'loadUserByUsername:'+ #resources.getUsername()", allEntries = true), @CacheEvict(allEntries = true)})
     @Transactional(rollbackFor = Exception.class)
     public void update(SysUser resources) {
         SysUser user = sysUserRepository.findById(resources.getId()).orElseGet(SysUser::new);
@@ -100,10 +102,10 @@ public class SysUserService extends BaseService<SysUser, String> {
 
         // 如果用户的角色改变了，需要手动清理下缓存
         if (!resources.getSysRoles().equals(user.getSysRoles())) {
-            String key = "role::loadPermissionByUser:" + user.getUsername();
-            ratelCacheProvider.del(key);
-            key = "role::findByUsers_Id:" + user.getId();
-            ratelCacheProvider.del(key);
+            String key = "loadPermissionByUser:" + user.getUsername();
+            ratelCacheProvider.del("sysRole", key);
+            key = "findByUsers_Id:" + user.getId();
+            ratelCacheProvider.del("sysRole", key);
         }
 
         user.setUsername(resources.getUsername());
@@ -116,7 +118,6 @@ public class SysUserService extends BaseService<SysUser, String> {
         user.setSex(resources.getSex());
         sysUserRepository.save(user);
     }
-
 
     @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
@@ -153,7 +154,7 @@ public class SysUserService extends BaseService<SysUser, String> {
         }
     }
 
-    @Cacheable(key = "'loadUserByUsername:'+#p0")
+    @Cacheable(key = "'findUserByUsername:'+#p0")
     public SysUser findByUsername(String userName) {
         SysUser user = sysUserRepository.findByUsername(userName);
         return user;

@@ -3,15 +3,18 @@
   <component name="Encoding" native2AsciiForPropertiesFiles="true">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ratel-boot" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ratel-boot-test" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ratel-cache-ehcache" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ratel-cache-redis" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ratel-framework" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ratel-generator" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ratel-log" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ratel-net-websocket" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ratel-oauth2-client" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ratel-oauth2-server" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ratel-oauth2-test" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ratel-quartz" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ratel-system" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ratel-system-mongo" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

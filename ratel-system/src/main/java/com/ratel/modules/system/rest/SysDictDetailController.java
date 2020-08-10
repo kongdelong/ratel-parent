@@ -29,7 +29,7 @@ public class SysDictDetailController {
     @Autowired
     private SysDictDetailService sysDictDetailService;
 
-    private static final String ENTITY_NAME = "dictDetail";
+    private static final String ENTITY_NAME = "sysDictDetail";
 
     @RatelLog("查询字典详情")
     @ApiOperation("查询字典详情")

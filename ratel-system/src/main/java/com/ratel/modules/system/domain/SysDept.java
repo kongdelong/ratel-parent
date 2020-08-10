@@ -43,6 +43,9 @@ public class SysDept extends BaseUuidEntity {
     @Column(name = "des_pid")
     private String desPid;
 
+    @Column(name = "type")
+    private String type;
+
     @JsonIgnore
     @ManyToMany(mappedBy = "sysDepts")
     private Set<SysRole> sysRoles;

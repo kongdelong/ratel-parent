@@ -40,7 +40,7 @@ public class SysMenuController {
     @Autowired
     private SysRoleService sysRoleService;
 
-    private static final String ENTITY_NAME = "menu";
+    private static final String ENTITY_NAME = "sysMenu";
 
     @RatelLog("导出菜单数据")
     @ApiOperation("导出菜单数据")

@@ -38,7 +38,7 @@ public class OnlineUserService {
      * @param token   /
      * @param request /
      */
-    public OnlineUser save(Authentication authentication, JwtUser jwtUser, String tokenId, String token, HttpServletRequest request) {
+    public OnlineUser save(Authentication authentication, JwtUser jwtUser, String token, HttpServletRequest request) {
         String deptName = jwtUser.getDeptName();
         String ip = StringUtils.getIp(request);
         String browser = StringUtils.getBrowser(request);
@@ -49,7 +49,7 @@ public class OnlineUserService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ratelCacheProvider.set(properties.getOnlineKey() + tokenId, onlineUser, properties.getTokenValidityInSeconds() / 1000);
+        ratelCacheProvider.set(properties.getOnlineKey() + jwtUser.getId(), onlineUser, properties.getTokenValidityInSeconds() / 1000);
         return onlineUser;
     }
 

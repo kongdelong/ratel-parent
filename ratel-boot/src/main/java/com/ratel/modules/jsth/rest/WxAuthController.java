@@ -82,7 +82,7 @@ public class WxAuthController {
             sysUser.setUsername(openId);
             sysUser.setEnabled(true);
             sysUser.setDataDomain("jsth");
-            sysUser = sysUserService.save(sysUser);
+            sysUser = sysUserService.saveAndFlush(sysUser);
             resource.setUserId(sysUser.getId());
             resource.setOpenId(openId);
             mongoUserLocationService.saveLocation(resource);

@@ -47,7 +47,7 @@ public class PasswordTokenGranter implements TokenGranter {
             return result;
         }
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,  new AuthCredentials(password));
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, new AuthCredentials(password));
         authenticationToken.setDetails(parameters);
         Authentication userAuth = new UsernamePasswordAuthenticationToken(username, password);
         ((AbstractAuthenticationToken) userAuth).setDetails(parameters);
@@ -70,7 +70,7 @@ public class PasswordTokenGranter implements TokenGranter {
 //        Date refreshTokenExpiration = Date.from(LocalDateTime.now().plusSeconds(client.getAccessTokenValidity()).atZone(ZoneId.systemDefault()).toInstant());
 
         String tokenId = UUID.randomUUID().toString().replace("-", "");
-        String accessToken = tokenProviderService.createToken(userAuth, tokenId, clientId);
+        String accessToken = tokenProviderService.createToken(userAuth, clientId);
         RatelUser userInfo = (RatelUser) userAuth.getPrincipal();
 
 //        String accessToken = Jwts.builder()

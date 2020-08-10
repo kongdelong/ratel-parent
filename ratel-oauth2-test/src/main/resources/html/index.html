@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        function goLogin() {
+            var url = 'http://localhost:8000/oauth/authorize?client_id=SampleClientId&response_type=code&redirect_uri=http://localhost:9000/api/demo/code';
+            window.location = url
+        }
+    </script>
+</head>
+<body>
+
+<button type="submit" onclick="goLogin()"><span>去登录</span></button>
+
+<!--http://localhost:9000/index.html-->
+
+<!--https://www.baidu.com/?code=818eaea4d27e4271ae533c8839ca46b8-->
+
+<!--http://localhost:8000/oauth/token?client_id=SampleClientId&client_secret=tgb.258&grant_type=authorization_code&redirect_uri=http://www.baidu.com&code=1E37Xk-->
+
+</body>
+
+</html>

@@ -1,8 +1,9 @@
-package com.ratel.framework.config;
+package com.ratel.config;
 
+
+import com.ratel.framework.config.RatelRepositoryFactoryBean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-
 
 @Configuration
 @EnableJpaRepositories(basePackages = {"com.ratel"},

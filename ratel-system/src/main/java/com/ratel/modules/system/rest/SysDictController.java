@@ -26,7 +26,7 @@ public class SysDictController {
     @Autowired
     private SysDictService sysDictService;
 
-    private static final String ENTITY_NAME = "dict";
+    private static final String ENTITY_NAME = "sysDict";
 
     @RatelLog("导出字典数据")
     @ApiOperation("导出字典数据")

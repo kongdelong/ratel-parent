@@ -5,7 +5,7 @@
     <parent>
         <artifactId>ratel-parent</artifactId>
         <groupId>com.ratel</groupId>
-        <version>0.0.22.RELEASE</version>
+        <version>0.1.3.RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -26,14 +26,19 @@
             <artifactId>ratel-oauth2-server</artifactId>
             <version>${ratel.parent.version}</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.ratel</groupId>-->
+<!--            <artifactId>ratel-generator</artifactId>-->
+<!--            <version>${ratel.parent.version}</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.ratel</groupId>
-            <artifactId>ratel-generator</artifactId>
+            <artifactId>ratel-cache-ehcache</artifactId>
             <version>${ratel.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.ratel</groupId>
-            <artifactId>ratel-cache-ehcache</artifactId>
+            <artifactId>ratel-net-websocket</artifactId>
             <version>${ratel.parent.version}</version>
         </dependency>
     </dependencies>

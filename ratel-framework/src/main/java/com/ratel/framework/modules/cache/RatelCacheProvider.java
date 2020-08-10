@@ -1,7 +1,6 @@
 package com.ratel.framework.modules.cache;
 
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public interface RatelCacheProvider {
@@ -74,8 +73,14 @@ public interface RatelCacheProvider {
      *
      * @param key 可以传一个值 或多个
      */
-    public void del(String... key);
+    public void del(String key);
 
+    /**
+     * 删除缓存
+     *
+     * @param key 可以传一个值 或多个
+     */
+    public void del(String name, String key);
 
     /**
      * 查找匹配key

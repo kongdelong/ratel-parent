@@ -40,7 +40,7 @@ public class SysMenuService extends BaseService<SysMenu, Long> {
     @Autowired
     private SysRoleService roleService;
 
-    @Cacheable
+//    @Cacheable
     public List<SysMenu> queryAll(SysMenuQueryCriteria criteria) {
         Sort sort = Sort.by(Sort.Direction.ASC, "sort");
         return sysMenuRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder), sort);

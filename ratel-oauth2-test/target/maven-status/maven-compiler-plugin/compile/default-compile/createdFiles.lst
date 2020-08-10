@@ -1,0 +1,4 @@
+com/ratel/modules/demo/rest/DemoController.class
+com/ratel/config/ConfigurerAdapter.class
+com/ratel/OauthAppRun.class
+com/ratel/config/RatelRepositoryConfig.class

@@ -34,7 +34,7 @@ public class SysDeptController {
     @Autowired
     private DataScope dataScope;
 
-    private static final String ENTITY_NAME = "dept";
+    private static final String ENTITY_NAME = "sysDept";
 
     @RatelLog("导出部门数据")
     @ApiOperation("导出部门数据")

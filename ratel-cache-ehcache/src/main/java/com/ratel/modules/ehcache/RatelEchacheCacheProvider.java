@@ -37,7 +37,7 @@ public class RatelEchacheCacheProvider implements RatelCacheProvider {
         this.cache = getCache(SYS_CACHE);
     }
 
-    protected net.sf.ehcache.Cache getCache(String name) {
+    public net.sf.ehcache.Cache getCache(String name) {
         if (!manager.cacheExists(name)) {
             synchronized (manager) {// 此处采用锁，因为可能初次访问一个cache时候都还未创建同时创建至于文件被锁,此处为了解决这个
                 if (!manager.cacheExists(name)) {
@@ -136,10 +136,13 @@ public class RatelEchacheCacheProvider implements RatelCacheProvider {
     }
 
     @Override
-    public void del(String... keys) {
-        for (String key : keys) {
-            this.remove(key);
-        }
+    public void del(String key) {
+        this.remove(key);
+    }
+
+    @Override
+    public void del(String name, String key) {
+        getCache(name).remove(key);
     }
 
     @Override

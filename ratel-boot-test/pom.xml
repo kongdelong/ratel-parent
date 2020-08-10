@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ratel-parent</artifactId>
+        <groupId>com.ratel</groupId>
+        <version>0.1.2.RELEASE</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>ratel-boot-test</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.ratel</groupId>
+            <artifactId>ratel-system</artifactId>
+            <version>${ratel.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ratel</groupId>
+            <artifactId>ratel-oauth2-server</artifactId>
+            <version>${ratel.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ratel</groupId>
+            <artifactId>ratel-generator</artifactId>
+            <version>${ratel.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ratel</groupId>
+            <artifactId>ratel-cache-ehcache</artifactId>
+            <version>${ratel.parent.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.zalando/problem-spring-web -->
+        <dependency>
+            <groupId>org.zalando</groupId>
+            <artifactId>problem-spring-web</artifactId>
+            <version>0.25.2</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

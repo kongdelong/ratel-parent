@@ -53,14 +53,16 @@ public class AuthorizationCodeTokenGranter implements TokenGranter {
             throw new OAuth2Exception("An authorization code must be supplied.", HttpStatus.BAD_REQUEST, "invalid_request");
         }
 
-        OnlineUser user = (OnlineUser) ratelCacheProvider.get(properties.getOnlineKey() + authorizationCode);
+        // 根据authorizationCode 获得 UserId
+        String userId = (String) ratelCacheProvider.get(authorizationCode);
+        OnlineUser user = (OnlineUser) ratelCacheProvider.get(properties.getOnlineKey() + userId);
 
         if (user != null) {
             Authentication userAuth = user.getAuthentication();
             RatelUser userInfo = (RatelUser) userAuth.getPrincipal();
 
             String tokenId = UUID.randomUUID().toString();
-            String accessToken = tokenProviderService.createToken(userAuth, tokenId, clientId);
+            String accessToken = tokenProviderService.createToken(userAuth, clientId);
 
 
 //            Date now = new Date();
@@ -107,6 +109,10 @@ public class AuthorizationCodeTokenGranter implements TokenGranter {
             result.put("accountOpenCode", userInfo.getId());
             result.put("scope", scope);
             result.put("jti", tokenId);
+            result.put("userId", userInfo.getId());
+            result.put("username", userInfo.getUsername());
+            result.put("deptId", userInfo.getDeptId());
+            result.put("deptName", userInfo.getDeptName());
             result.put("status", 1);
             return result;
         } else {

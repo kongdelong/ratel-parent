@@ -1,16 +1,16 @@
 package com.ratel.modules.oserver.domain;
 
 import com.ratel.framework.domain.BaseUuidEntity;
+import com.ratel.modules.system.config.JpaConverterListJson;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -37,4 +37,10 @@ public class OauthClient extends BaseUuidEntity {
      * 客户端过期时间
      */
     private LocalDateTime expirationDate;
+
+    private String connType;//接入类型
+
+    @Convert(converter = JpaConverterListJson.class)
+    @Column(columnDefinition = "TEXT")
+    private List<String> ips;
 }

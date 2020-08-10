@@ -1,5 +1,9 @@
 package com.ratel.modules.oserver.rest;
 
+import com.ratel.framework.http.FormsHttpEntity;
+import com.ratel.framework.modules.cache.RatelCacheProvider;
+import com.ratel.framework.modules.system.domain.RatelUser;
+import com.ratel.framework.utils.SecurityUtils;
 import com.ratel.framework.utils.StringUtils;
 import com.ratel.modules.oserver.config.CachesEnum;
 import com.ratel.modules.oserver.domain.OauthClient;
@@ -7,6 +11,7 @@ import com.ratel.modules.oserver.service.OauthClientService;
 import com.ratel.modules.oserver.token.AuthorizationCodeTokenGranter;
 import com.ratel.modules.oserver.token.PasswordTokenGranter;
 import com.ratel.modules.oserver.token.RefreshTokenGranter;
+import com.ratel.modules.security.config.SecurityProperties;
 import com.ratel.modules.security.service.TokenProviderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +61,12 @@ public class OauthController {
     @Autowired
     TokenProviderService tokenProviderService;
 
+    @Autowired
+    private RatelCacheProvider ratelCacheProvider;
+
+    @Autowired
+    private SecurityProperties properties;
+
     @Value("${ratel.oauth.loginPath}")
     String loginPath;
 
@@ -94,13 +105,13 @@ public class OauthController {
         if (StringUtils.equalsIgnoreCase(grant_type, "password")) {
             result = passwordTokenGranter.grant(client, "password", parameters);
         } else if (StringUtils.equalsIgnoreCase(grant_type, "authorization_code")) {
-            if (StringUtils.isEmpty(redirect_uri) || !StringUtils.equalsIgnoreCase(client.getWebServerRedirectUri(), redirect_uri)) {
-                result.put("status", 0);
-                result.put("code", "invalid_redirect_uri");
-                result.put("message", "invalid_redirect_uri");
-                return new ResponseEntity<>(
-                        result, headers, HttpStatus.OK);
-            }
+//            if (StringUtils.isEmpty(redirect_uri) || !StringUtils.equalsIgnoreCase(client.getWebServerRedirectUri(), redirect_uri)) {
+//                result.put("status", 0);
+//                result.put("code", "invalid_redirect_uri");
+//                result.put("message", "invalid_redirect_uri");
+//                return new ResponseEntity<>(
+//                        result, headers, HttpStatus.OK);
+//            }
             result = authorizationCodeTokenGranter.grant(client, "authorization_code", parameters);
         } else if (StringUtils.equalsIgnoreCase(grant_type, "refresh_token")) {
             result = refreshTokenGranter.grant(client, grant_type, parameters);
@@ -122,7 +133,18 @@ public class OauthController {
                                  @RequestParam(value = "redirect_uri") String redirect_uri, HttpServletResponse response) throws IOException {
         OauthClient client = oauthClientService.findByClientId(client_id);
 
-        if (client == null || !StringUtils.equalsIgnoreCase(client.getWebServerRedirectUri(), redirect_uri)) {
+        boolean redirectUriFlag = false;
+
+        if (client.getIps() != null) {
+            for (String ip : client.getIps()) {
+                if (redirect_uri.startsWith(ip)) {
+                    redirectUriFlag = true;
+                    break;
+                }
+            }
+        }
+
+        if (!redirectUriFlag) {
             if (redirect_uri.indexOf("?") > 0) {
                 response.sendRedirect(redirect_uri + "&error=invalid_client");
             } else {
@@ -218,4 +240,16 @@ public class OauthController {
         return result;
     }
 
+    @GetMapping("/authorizeCode")
+    public ResponseEntity<Object> authorizeCode() throws IOException {
+        try {
+            RatelUser ratelUser = SecurityUtils.getRatelUserWithNoException();
+            String code = UUID.randomUUID().toString().replace("-", "");
+            ratelCacheProvider.set(code, ratelUser.getId(), properties.getTokenValidityInSeconds() / 1000);
+            return FormsHttpEntity.ok(code);
+        } catch (Exception e) {
+            log.error("获取用户信息错误", e);
+        }
+        return FormsHttpEntity.error("获得code失败",-1,"获得code失败");
+    }
 }

@@ -9,7 +9,6 @@ import org.springframework.data.redis.core.RedisConnectionUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -156,14 +155,19 @@ public class RatelRedisCacheProvider implements RatelCacheProvider {
      *
      * @param key 可以传一个值 或多个
      */
-    public void del(String... key) {
-        if (key != null && key.length > 0) {
-            if (key.length == 1) {
-                redisTemplate.delete(key[0]);
-            } else {
-                redisTemplate.delete(CollectionUtils.arrayToList(key));
-            }
-        }
+    public void del(String key) {
+//        if (key != null && key.length > 0) {
+//            if (key.length == 1) {
+        redisTemplate.delete(key);
+//            } else {
+//                redisTemplate.delete(CollectionUtils.arrayToList(key));
+//            }
+//        }
+    }
+
+    @Override
+    public void del(String name, String key) {
+        redisTemplate.delete(name + ":" + key);
     }
 
     // ============================String=============================

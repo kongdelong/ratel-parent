@@ -40,16 +40,14 @@ public class AuthService {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, authCredentials);
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        // 生成令牌
-        String tokenId = UUID.randomUUID().toString().replace("-", "");
-        String token = tokenProviderService.createToken(authentication, tokenId, clientId);
+        String token = tokenProviderService.createToken(authentication, clientId);
         final JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
         // 保存在线信息
-        onlineUserService.save(authentication, jwtUser, tokenId, token, request);
+        onlineUserService.save(authentication, jwtUser, token, request);
         // 返回 token 与 用户信息
         Map<String, Object> authInfo = new HashMap<String, Object>(2) {{
             put("token", properties.getTokenStartWith() + token);
-            put("tokenId", tokenId);
+            put("tokenId", jwtUser.getId());
             put("user", jwtUser);
         }};
         if (singleLogin) {

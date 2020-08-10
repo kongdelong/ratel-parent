@@ -1,6 +1,6 @@
 package com.ratel.modules.jsth.utils;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class EmojiFilter {
     public static boolean containsEmoji(String source) {

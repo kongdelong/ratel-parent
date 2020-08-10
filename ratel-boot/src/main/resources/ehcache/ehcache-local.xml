@@ -9,7 +9,6 @@
 
 	<!-- 系统缓存 -->
 	<cache name="sysCache" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
-
 	<!-- 用户缓存 -->
 	<cache name="sysUser" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
 	<!-- 角色缓存 -->
@@ -20,9 +19,10 @@
 	<!-- 存储典缓存 -->
 	<cache name="sysStorage" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
 	<cache name="sysDept" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
+	<!-- 鉴权客户端缓存 -->
+	<cache name="oauthClient" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
 
 	<cache name="sysMenu" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
-	<cache name="oauthClient" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
 	<cache name="genConfig" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
 
 	<!-- 集团缓存 -->
