@@ -69,6 +69,19 @@ public class OauthClientController {
         return FormsHttpEntity.ok(oauthClientService.create(resources));
     }
 
+    @RatelLog("重置客户端密钥")
+    @ApiOperation("重置客户端密钥")
+    @PostMapping(value = "/update")
+    @PreAuthorize("@ratel.check('oauthClient:add','oauthClient:edit')")
+    public ResponseEntity<Object> update(@Validated @RequestBody OauthClient resources) {
+
+        if(!StringUtils.isBlank(resources.getId())){
+            resources.setClientId(UUID.randomUUID().toString().replace("-",""));
+            resources.setClientSecret(UUID.randomUUID().toString().replace("-",""));
+        }
+        return FormsHttpEntity.ok(oauthClientService.create(resources));
+    }
+
     @RatelLog("删除客户端配置")
     @ApiOperation("删除客户端配置")
     @DeleteMapping
