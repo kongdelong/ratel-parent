@@ -22,6 +22,8 @@ public class SysUserQueryCriteria implements Serializable {
 
     @Query
     private Boolean enabled;
+    @Query
+    private String enable;
 
     private String sysDeptId;
 

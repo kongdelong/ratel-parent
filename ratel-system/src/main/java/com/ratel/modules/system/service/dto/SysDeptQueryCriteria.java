@@ -21,7 +21,8 @@ public class SysDeptQueryCriteria {
 
     @Query
     private Boolean enabled;
-
+    @Query
+    private String enable;
     @Query
     private String pid;
 

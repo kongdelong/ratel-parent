@@ -1,11 +1,14 @@
 package com.ratel.modules.system.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ratel.framework.GlobalConstant;
 import com.ratel.framework.domain.BaseUuidEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLDeleteAll;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -21,6 +24,9 @@ import java.util.Set;
 @Entity
 @Table(name = "sys_dept")
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+//@Where(clause = "enable="+ GlobalConstant.STATUS_VALUE)
+@SQLDelete(sql="update sys_dept set enable="+ GlobalConstant.DEL_FLAG_VALUE+" where id=?")
+@SQLDeleteAll(sql="update sys_dept set enable="+GlobalConstant.DEL_FLAG_VALUE+" where id=?")
 public class SysDept extends BaseUuidEntity {
 
     @Column(name = "name", nullable = false)

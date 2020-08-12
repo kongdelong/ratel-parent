@@ -1,11 +1,14 @@
 package com.ratel.modules.system.domain;
 
+import com.ratel.framework.GlobalConstant;
 import com.ratel.framework.domain.BaseUuidEntity;
 import com.ratel.modules.system.config.JpaConverterListJson;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLDeleteAll;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -20,6 +23,9 @@ import java.util.*;
 @Entity
 @Table(name = "sys_user")
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+//@Where(clause = "enable="+GlobalConstant.STATUS_VALUE)
+@SQLDelete(sql="update sys_user set enable="+ GlobalConstant.DEL_FLAG_VALUE+" where id=?")
+@SQLDeleteAll(sql="update sys_user set enable="+GlobalConstant.DEL_FLAG_VALUE+" where id=?")
 public class SysUser extends BaseUuidEntity {
 
     @NotBlank

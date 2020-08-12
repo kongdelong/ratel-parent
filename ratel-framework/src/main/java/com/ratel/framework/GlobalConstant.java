@@ -14,6 +14,7 @@ public class GlobalConstant {
     public static final String DEFAULT_VALUE = "default";
     public static final String NONE_VALUE = "none";
     public static final String STATUS_VALUE = "1";
+    public static final String DEL_FLAG_VALUE = "0"; // 已经删除
 
     public static final String API_MAPPING_PREFIX = "/api";
 
